@@ -1,5 +1,5 @@
 ---
-title: "MUSA 5080 Portfolio"
+title: "Yanyang Chen - MUSA 5080 Portfolio"
 ---
 
 # Welcome to My Portfolio
@@ -15,8 +15,11 @@ Advanced spatial analysis and data science for urban planning and public policy.
 - **Final Project:** Capstone modeling challenge
 
 ## About Me
-[Students will customize this section]
+Hi! My name is **Yanyang Chen**.  I am currently pursuing a Master's degree in Urban Spatial Analytics at the University of Pennsylvania.  
+I have a background in Urban and Rural Planning from Jilin University Zhuhai College, with experience in urban design, spatial analysis, and architecture.  
+I am passionate about applying data-driven methods to solve urban problems and to promote sustainable and resilient city development.  
+
 
 ## Contact
-- Email: [your.email@upenn.edu]
-- GitHub: [@your-username]
+- Email: [chen07@upenn.edu]
+- GitHub: [@YanyangChen-penn]
