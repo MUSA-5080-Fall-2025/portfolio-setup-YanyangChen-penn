@@ -10,7 +10,7 @@ date: "2025-09-08"
 - `summarize()` - calculate statistics
 - `group_by()` - operate on groups
 ## Coding Techniques
-- [New R functions or approaches]
+- [New R functions bro]
 - [Quarto features learned]
 
 ## Questions & Challenges
@@ -18,7 +18,7 @@ date: "2025-09-08"
 - [Areas needing more practice]
 
 ## Connections to Policy
-- [How this week's content applies to real policy work]
+- [so rookie]
 
 ## Reflection
 - [What was most interesting]
