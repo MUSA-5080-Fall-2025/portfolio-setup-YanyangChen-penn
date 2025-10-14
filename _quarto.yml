@@ -10,6 +10,8 @@ website:
         text: Home
       - href: weekly-notes/week-01-notes.html
         text: Weekly Notes
+      - href: assignments/assignment2.html
+        text:assignments
 
 format:
   html:
