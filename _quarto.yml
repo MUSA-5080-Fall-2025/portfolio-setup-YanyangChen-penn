@@ -8,10 +8,24 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: weekly-notes/week-01-notes.html
-        text: Weekly Notes
-      - href: assignments/assignment2.html
-        text:assignments
+      - text: Weekly Notes 
+        menu: 
+          - href: weekly-notes/
+            text: "All Notes"
+          - href: weekly-notes/week-01-notes.qmd
+            text: "Week 1 Notes"
+          - href: weekly-notes/week-02-notes.qmd
+            text: "Week 2 Notes"
+      - text: "Labs"
+        menu:
+          - href: labs/lab1/week-03/policy_lab1.qmd
+            text: "Lab 1"
+      - text: "Assignments"
+        menu:
+          - href: assignments/assignment_1/assignment1.qmd
+            text: "Assignment 1"
+          - href: assignments/assignment_2/assignment2.qmd
+            text: "Assignment 2"
 
 format:
   html:
