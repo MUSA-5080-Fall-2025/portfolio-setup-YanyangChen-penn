@@ -1,0 +1,14 @@
+---
+title: "Weekly Notes"
+---
+
+# Weekly Learning Notes
+
+Welcome to my weekly notes for MUSA 5080 - Public Policy Analytics. Here you'll find my reflections, key concepts, and learning outcomes from each week.
+
+## Available Notes
+
+- [Week 1 Notes](week-01-notes.qmd)
+- [Week 2 Notes](week-02-notes.qmd)
+
+More notes will be added as the course progresses.

@@ -1,5 +1,20 @@
 {
   "index.qmd": {
     "index.html": "e7103c9c"
+  },
+  "assignments/assignment_1/assignment1.qmd": {
+    "assignment1.html": "9bb51b3c"
+  },
+  "assignments/assignment_2/assignment2.qmd": {
+    "assignment2.html": "1e57a0c5"
+  },
+  "instructions_week1.md": {
+    "instructions_week1.html": "163ecd81"
+  },
+  "weekly-notes/index.qmd": {
+    "index.html": "c6d3dd07"
+  },
+  "weekly-notes/week-01-notes.qmd": {
+    "week-01-notes.html": "e3182a23"
   }
 }

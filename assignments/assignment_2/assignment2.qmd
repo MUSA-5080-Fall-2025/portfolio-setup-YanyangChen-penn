@@ -55,11 +55,10 @@ library(tidycensus)
 library(tigris)
 
 # Load spatial data
-counties <- st_read("E:/Upenn course/policy/MUSA-5080-Fall-2025/lectures/week-04/data/Pennsylvania_County_Boundaries.shp")
-counties <- st_read("E:/Upenn course/policy/MUSA-5080-Fall-2025/lectures/week-04/data/Pennsylvania_County_Boundaries.shp")
+counties <- st_read("E:/Upenn_course/policy/MUSA-5080-Fall-2025/MUSA-5080-Fall-2025/MUSA-5080-Fall-2025/lectures/week-04/data/Pennsylvania_County_Boundaries.shp")
 census_api_key("940dffa67b928a0518accaf8839aa7b4762b11ab")
 census_tracts <- tracts(state = "PA", cb = TRUE)
-hospitals <- st_read("E:/Upenn course/policy/MUSA-5080-Fall-2025/lectures/week-04/data/hospitals.geojson")
+hospitals <- st_read("E:/Upenn_course/policy/MUSA-5080-Fall-2025/MUSA-5080-Fall-2025/MUSA-5080-Fall-2025/lectures/week-04/data/hospitals.geojson")
 
 # 3. Pennsylvania census tracts
 # Check that all data loaded correctly

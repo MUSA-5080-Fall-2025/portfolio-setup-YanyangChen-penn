@@ -10,7 +10,7 @@ website:
         text: Home
       - text: Weekly Notes 
         menu: 
-          - href: weekly-notes/
+          - href: weekly-notes/index.qmd
             text: "All Notes"
           - href: weekly-notes/week-01-notes.qmd
             text: "Week 1 Notes"
@@ -18,7 +18,7 @@ website:
             text: "Week 2 Notes"
       - text: "Labs"
         menu:
-          - href: labs/lab1/week-03/policy_lab1.qmd
+          - href: labs/lab1/policy_lab1.qmd
             text: "Lab 1"
       - text: "Assignments"
         menu:
