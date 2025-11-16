@@ -1,0 +1,848 @@
+---
+title: "Spatial Predictive Analysis: Chicago Graffiti Removal 311 Requests"
+subtitle: "MUSA 5080 Lab Assignment 4"
+author: "Your Name"
+date: "`r Sys.Date()`"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    self-contained: true
+    theme: cosmo
+    highlight-style: github
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 14,
+  fig.height = 9,
+  dpi = 300
+)
+set.seed(123)
+```
+
+# Introduction
+
+Graffiti represents a persistent challenge to urban neighborhoods, affecting aesthetic quality, public safety perceptions, and property values. Chicago's 311 service request system provides a comprehensive record of graffiti removal requests across the city. This analysis applies spatial predictive modeling to understand whether we can forecast graffiti concentrations using spatial features and count regression models.
+
+**Analysis Goals:**
+- Develop a spatial predictive model using k-nearest neighbor and Local Moran's I features
+- Compare Poisson and Negative Binomial regression performance
+- Validate models using spatial cross-validation (Leave-One-Group-Out)
+- Test temporal stability using 2018 crime data
+- Evaluate predictive accuracy against kernel density estimation baseline
+
+---
+
+# Part 1: Data Loading and Exploration
+
+## Loading Required Libraries
+
+```{r load_libraries}
+# Data manipulation
+library(tidyverse)
+library(lubridate)
+
+# Spatial analysis
+library(sf)
+library(sp)
+library(raster)
+library(spdep)
+library(spatstat)
+
+# Visualization
+library(ggplot2)
+library(gridExtra)
+library(viridis)
+
+# Regression modeling
+library(MASS)
+library(broom)
+
+# Data access
+library(jsonlite)
+library(httr)
+
+# Utilities
+library(knitr)
+
+theme_set(theme_minimal())
+```
+
+## Downloading Graffiti Data from Chicago Data Portal
+
+The Chicago 311 system records service requests across multiple categories. We focus on Graffiti Removal requests for 2017. The Socrata API allows direct download of filtered datasets.
+
+```{r load_graffiti_2017}
+# Chicago 311 API endpoint for graffiti data
+api_url <- "https://data.cityofchicago.org/resource/hec5-y4x5.json"
+
+# Query parameters: filter for 2017 data with limit
+params <- list(
+  "$where" = "date_extract_year(creation_date) = 2017",
+  "$limit" = 50000
+)
+
+# Execute API request
+response <- GET(api_url, query = params)
+graffiti_raw <- fromJSON(content(response, "text"))
+
+# Convert to tibble
+graffiti_df <- as_tibble(graffiti_raw)
+
+cat("Raw 2017 Graffiti Data Summary:\n")
+cat("Total Records:", nrow(graffiti_df), "\n")
+cat("Variables:", ncol(graffiti_df), "\n\n")
+
+head(graffiti_df, 5)
+```
+
+## Data Cleaning and Preparation
+
+```{r clean_graffiti_data}
+# Clean and prepare graffiti data
+graffiti_clean <- graffiti_df %>%
+  # Remove records with missing coordinates
+  filter(!is.na(longitude) & !is.na(latitude)) %>%
+  # Convert to numeric
+  mutate(
+    longitude = as.numeric(longitude),
+    latitude = as.numeric(latitude),
+    creation_date = as.POSIXct(creation_date),
+    year = year(creation_date),
+    month = month(creation_date),
+    date = as_date(creation_date)
+  ) %>%
+  # Select relevant fields
+  select(service_request_id, longitude, latitude, creation_date, year, month, date, address) %>%
+  # Remove any remaining invalid coordinates
+  filter(longitude > -88.5 & longitude < -87.5,
+         latitude > 41.6 & latitude < 42.1)
+
+cat("Data Cleaning Summary:\n")
+cat("Records after cleaning:", nrow(graffiti_clean), "\n")
+cat("Date range:", min(graffiti_clean$date), "to", max(graffiti_clean$date), "\n")
+
+head(graffiti_clean, 5)
+```
+
+## Converting to Spatial Object
+
+```{r convert_to_sf}
+# Convert to sf object (WGS84)
+graffiti_wgs84 <- st_as_sf(graffiti_clean,
+                            coords = c("longitude", "latitude"),
+                            crs = 4326)
+
+# Project to UTM Zone 16N for accurate distance calculations
+graffiti_utm <- st_transform(graffiti_wgs84, crs = 32616)
+
+cat("Spatial Object Created:\n")
+cat("Total features:", nrow(graffiti_utm), "\n")
+```
+
+## Loading Chicago City Boundary
+
+```{r load_chicago_boundary}
+# Load Chicago boundary from city's open data portal
+chicago_url <- "https://data.cityofchicago.org/api/geospatial/igwz-8jzy?method=export&format=GeoJSON"
+chicago_boundary <- st_read(chicago_url, quiet = TRUE)
+
+# Project to UTM Zone 16N
+chicago_utm <- st_transform(chicago_boundary, crs = 32616)
+
+cat("Chicago Boundary Loaded\n")
+cat("Area:", round(as.numeric(st_area(chicago_utm))/1e6, 1), "km²\n")
+```
+
+## Visualizing Spatial Distribution
+
+```{r plot_graffiti_points, fig.width=12, fig.height=8}
+# Create base map showing all graffiti points
+ggplot() +
+  geom_sf(data = chicago_utm, fill = NA, color = "black", linewidth = 0.8) +
+  geom_sf(data = graffiti_utm, color = "#E31C23", size = 0.8, alpha = 0.3) +
+  theme_minimal() +
+  labs(
+    title = "Spatial Distribution of Graffiti Removal Requests (2017)",
+    subtitle = paste("Total requests:", nrow(graffiti_utm)),
+    x = "UTM Easting (m)",
+    y = "UTM Northing (m)"
+  ) +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    plot.subtitle = element_text(size = 11),
+    axis.text = element_text(size = 9)
+  )
+```
+
+## Temporal Patterns
+
+```{r temporal_analysis, fig.width=12, fig.height=6}
+# Calculate monthly statistics
+monthly_stats <- graffiti_clean %>%
+  group_by(month) %>%
+  summarise(
+    count = n(),
+    avg_per_day = n() / n_distinct(date),
+    .groups = "drop"
+  ) %>%
+  mutate(month_name = month.abb[month])
+
+# Visualize monthly distribution
+ggplot(monthly_stats, aes(x = reorder(month_name, month), y = count)) +
+  geom_col(fill = "#E31C23", alpha = 0.8, color = "black", linewidth = 0.3) +
+  geom_text(aes(label = count), vjust = -0.3, size = 3.5, fontface = "bold") +
+  theme_minimal() +
+  labs(
+    title = "Monthly Distribution of Graffiti Requests (2017)",
+    x = "Month",
+    y = "Number of Requests"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(size = 13, face = "bold")
+  )
+
+cat("\nTemporal Summary:\n")
+print(monthly_stats)
+```
+
+---
+
+# Part 2: Fishnet Grid Creation
+
+## Creating 500m × 500m Grid
+
+We convert the point-based dataset into a regular grid structure for spatial analysis.
+
+```{r create_fishnet_grid}
+# Create regular grid covering Chicago
+fishnet_full <- st_make_grid(
+  chicago_utm,
+  cellsize = 500,
+  square = TRUE,
+  what = "polygons"
+) %>%
+  st_as_sf() %>%
+  mutate(grid_id = row_number())
+
+# Keep only grid cells intersecting Chicago boundary
+fishnet_chicago <- fishnet_full[chicago_utm, ]
+
+cat("Fishnet Grid Created:\n")
+cat("Total grid cells:", nrow(fishnet_chicago), "\n")
+cat("Cell size: 500m × 500m\n")
+```
+
+## Aggregating Graffiti Counts to Grid
+
+```{r aggregate_graffiti_to_grid}
+# Aggregate graffiti points to grid cells
+graffiti_grid <- fishnet_chicago %>%
+  st_join(graffiti_utm, join = st_contains) %>%
+  group_by(grid_id) %>%
+  summarise(
+    n_graffiti = n(),
+    geometry = first(geometry),
+    .groups = "drop"
+  ) %>%
+  mutate(n_graffiti = ifelse(is.na(n_graffiti), 0, n_graffiti)) %>%
+  st_sf()
+
+cat("Grid Aggregation Complete:\n")
+cat("Total cells:", nrow(graffiti_grid), "\n")
+cat("Cells with graffiti:", sum(graffiti_grid$n_graffiti > 0), "\n")
+cat("Mean per cell:", round(mean(graffiti_grid$n_graffiti), 2), "\n\n")
+
+print(summary(graffiti_grid$n_graffiti))
+```
+
+## Visualizing Grid Aggregation
+
+```{r plot_grid_distribution, fig.width=14, fig.height=8}
+# Map showing graffiti counts per grid cell
+p1 <- ggplot() +
+  geom_sf(data = graffiti_grid, aes(fill = n_graffiti), color = NA) +
+  geom_sf(data = chicago_utm, fill = NA, color = "black", linewidth = 0.5) +
+  scale_fill_viridis_c(
+    name = "Requests",
+    option = "plasma"
+  ) +
+  theme_minimal() +
+  labs(
+    title = "Graffiti Count Aggregation to 500m Grid",
+    x = "UTM Easting (m)",
+    y = "UTM Northing (m)"
+  ) +
+  theme(plot.title = element_text(size = 13, face = "bold"))
+
+# Histogram of counts
+p2 <- ggplot(graffiti_grid, aes(x = n_graffiti)) +
+  geom_histogram(bins = 40, fill = "#E31C23", alpha = 0.8, color = "black") +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Graffiti Counts",
+    x = "Requests per Cell",
+    y = "Frequency"
+  ) +
+  theme(plot.title = element_text(size = 12, face = "bold"))
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+---
+
+# Part 3: Spatial Features Construction
+
+## Creating Spatial Weights Matrix
+
+```{r spatial_weights_matrix}
+# Convert to sp object (required by spdep)
+graffiti_sp <- as_Spatial(graffiti_grid)
+
+# Create k-nearest neighbors structure (k=5)
+knn_neighbors <- knearneigh(coordinates(graffiti_sp), k = 5)
+knn_weights <- knn2nb(knn_neighbors, sym = TRUE)
+knn_weights_std <- nb2listw(knn_weights, style = "W")
+
+cat("Spatial Weights Matrix Created:\n")
+cat("Type: k-nearest neighbors (k=5)\n")
+```
+
+## Computing k-NN Features
+
+```{r knn_features}
+# Calculate spatial lag
+neighbor_lags <- lag.listw(knn_weights_std, graffiti_grid$n_graffiti)
+
+# Add to grid data
+graffiti_grid <- graffiti_grid %>%
+  mutate(neighbor_mean = neighbor_lags)
+
+cat("k-NN Features Computed\n")
+cat("Correlation with own count:", 
+    round(cor(graffiti_grid$n_graffiti, graffiti_grid$neighbor_mean, 
+              use = "complete.obs"), 3), "\n")
+```
+
+## Local Moran's I Analysis
+
+```{r local_morans_i}
+# Calculate Local Moran's I
+local_moran <- localmoran(graffiti_grid$n_graffiti, knn_weights_std)
+
+# Extract and classify
+graffiti_grid <- graffiti_grid %>%
+  mutate(
+    local_i = local_moran[, 1],
+    local_i_pval = local_moran[, 5],
+    moran_cluster = case_when(
+      local_i_pval >= 0.05 ~ "Not significant",
+      local_i >= 0 & n_graffiti >= median(graffiti_grid$n_graffiti) ~ "High-High",
+      local_i >= 0 & n_graffiti < median(graffiti_grid$n_graffiti) ~ "Low-Low",
+      local_i < 0 & n_graffiti >= median(graffiti_grid$n_graffiti) ~ "High-Low",
+      TRUE ~ "Low-High"
+    )
+  )
+
+cat("Local Moran's I Analysis:\n")
+print(table(graffiti_grid$moran_cluster))
+```
+
+## Visualizing Hotspots
+
+```{r plot_local_morans, fig.width=12, fig.height=8}
+ggplot() +
+  geom_sf(data = graffiti_grid, aes(fill = moran_cluster), color = NA) +
+  geom_sf(data = chicago_utm, fill = NA, color = "black", linewidth = 0.5) +
+  scale_fill_manual(
+    name = "Cluster Type",
+    values = c(
+      "High-High" = "#d73027",
+      "Low-Low" = "#91bfdb",
+      "High-Low" = "#fee090",
+      "Low-High" = "#a6d96a",
+      "Not significant" = "#f7f7f7"
+    )
+  ) +
+  theme_minimal() +
+  labs(
+    title = "Local Moran's I: Graffiti Hotspots and Coldspots",
+    x = "UTM Easting (m)",
+    y = "UTM Northing (m)"
+  ) +
+  theme(plot.title = element_text(size = 13, face = "bold"))
+```
+
+## Distance to Hotspot Feature
+
+```{r distance_to_hotspot}
+# Identify hotspots
+hotspot_threshold <- quantile(graffiti_grid$n_graffiti, 0.75)
+hotspots <- graffiti_grid %>% filter(n_graffiti >= hotspot_threshold)
+hotspot_center <- st_centroid(st_union(hotspots))
+
+# Calculate distance
+graffiti_grid <- graffiti_grid %>%
+  mutate(
+    dist_to_hotspot = as.numeric(st_distance(., hotspot_center)) / 1000
+  )
+
+cat("Distance to Hotspot Feature:\n")
+cat("Hotspot threshold:", hotspot_threshold, "requests\n")
+cat("Distance range:", round(min(graffiti_grid$dist_to_hotspot), 2), 
+    "to", round(max(graffiti_grid$dist_to_hotspot), 2), "km\n")
+```
+
+---
+
+# Part 4: Count Regression Models
+
+## Model Preparation
+
+```{r model_preparation}
+# Prepare data for modeling
+model_data <- graffiti_grid %>%
+  st_drop_geometry() %>%
+  select(grid_id, n_graffiti, neighbor_mean, local_i, dist_to_hotspot) %>%
+  na.omit()
+
+cat("Model Data Prepared:\n")
+cat("Sample size:", nrow(model_data), "\n")
+cat("Dependent variable (n_graffiti):\n")
+print(summary(model_data$n_graffiti))
+```
+
+## Poisson Regression
+
+```{r poisson_model}
+# Fit Poisson regression
+poisson_model <- glm(
+  n_graffiti ~ neighbor_mean + local_i + dist_to_hotspot,
+  family = poisson(link = "log"),
+  data = model_data
+)
+
+# Display results
+cat("\nPOISSON REGRESSION RESULTS\n")
+cat("=" %*% 50, "\n\n")
+print(summary(poisson_model))
+
+# Extract metrics
+poisson_aic <- AIC(poisson_model)
+poisson_deviance <- deviance(poisson_model)
+poisson_dispersion <- poisson_deviance / df.residual(poisson_model)
+
+cat("\nModel Fit Statistics:\n")
+cat("AIC:", round(poisson_aic, 2), "\n")
+cat("Dispersion statistic:", round(poisson_dispersion, 3), "\n")
+```
+
+## Negative Binomial Regression
+
+```{r negative_binomial_model}
+# Fit Negative Binomial regression
+nb_model <- glm.nb(
+  n_graffiti ~ neighbor_mean + local_i + dist_to_hotspot,
+  data = model_data
+)
+
+cat("\nNEGATIVE BINOMIAL REGRESSION RESULTS\n")
+cat("=" %*% 50, "\n\n")
+print(summary(nb_model))
+
+# Extract metrics
+nb_aic <- AIC(nb_model)
+nb_deviance <- deviance(nb_model)
+
+cat("\nModel Fit Statistics:\n")
+cat("AIC:", round(nb_aic, 2), "\n")
+```
+
+## Model Comparison
+
+```{r model_comparison}
+# Compare models
+cat("\nMODEL COMPARISON\n")
+cat("=" %*% 50, "\n")
+cat("Poisson AIC:", round(poisson_aic, 2), "\n")
+cat("Negative Binomial AIC:", round(nb_aic, 2), "\n")
+cat("Difference:", round(poisson_aic - nb_aic, 2), "\n\n")
+
+if (nb_aic < poisson_aic) {
+  cat("→ Negative Binomial model preferred\n")
+  selected_model <- nb_model
+  model_name <- "Negative Binomial"
+} else {
+  cat("→ Poisson model preferred\n")
+  selected_model <- poisson_model
+  model_name <- "Poisson"
+}
+
+# Extract coefficients
+coef_table <- tidy(selected_model, exponentiate = TRUE, conf.int = TRUE)
+cat("\nModel Coefficients (Exponentiated):\n")
+print(coef_table)
+```
+
+---
+
+# Part 5: Spatial Cross-Validation (2017 Data)
+
+## Setting Up Spatial Folds
+
+```{r spatial_cv_setup}
+# Create spatial folds
+set.seed(123)
+n_folds <- 5
+
+centroids <- st_coordinates(st_centroid(graffiti_grid))
+spatial_folds <- kmeans(centroids, centers = n_folds)$cluster
+
+cv_data <- graffiti_grid %>%
+  st_drop_geometry() %>%
+  select(grid_id, n_graffiti, neighbor_mean, local_i, dist_to_hotspot) %>%
+  na.omit() %>%
+  mutate(fold = spatial_folds[grid_id])
+
+cat("Spatial Cross-Validation Setup:\n")
+cat("Number of folds:", n_folds, "\n")
+cat("Fold sizes:\n")
+print(table(cv_data$fold))
+```
+
+## Running Cross-Validation
+
+```{r run_spatial_cv}
+# Cross-validation loop
+cv_results <- tibble()
+
+for (fold_num in 1:n_folds) {
+  train_data <- cv_data %>% filter(fold != fold_num)
+  test_data <- cv_data %>% filter(fold == fold_num)
+  
+  # Fit model
+  if (model_name == "Negative Binomial") {
+    fold_model <- glm.nb(
+      n_graffiti ~ neighbor_mean + local_i + dist_to_hotspot,
+      data = train_data
+    )
+  } else {
+    fold_model <- glm(
+      n_graffiti ~ neighbor_mean + local_i + dist_to_hotspot,
+      family = poisson(link = "log"),
+      data = train_data
+    )
+  }
+  
+  # Predictions
+  pred <- predict(fold_model, newdata = test_data, type = "response")
+  
+  fold_results <- test_data %>%
+    mutate(
+      fold = fold_num,
+      observed = n_graffiti,
+      predicted = pred,
+      error = observed - predicted,
+      abs_error = abs(error),
+      squared_error = error^2
+    ) %>%
+    select(fold, grid_id, observed, predicted, error, abs_error, squared_error)
+  
+  cv_results <- bind_rows(cv_results, fold_results)
+}
+
+cat("Cross-Validation Complete:\n")
+cat("Total predictions:", nrow(cv_results), "\n")
+```
+
+## Cross-Validation Metrics
+
+```{r cv_error_metrics}
+# Calculate error metrics
+mae <- mean(cv_results$abs_error, na.rm = TRUE)
+rmse <- sqrt(mean(cv_results$squared_error, na.rm = TRUE))
+me <- mean(cv_results$error, na.rm = TRUE)
+
+cat("SPATIAL CROSS-VALIDATION RESULTS (2017)\n")
+cat("=" %*% 50, "\n")
+cat("Mean Absolute Error (MAE):", round(mae, 3), "\n")
+cat("Root Mean Squared Error (RMSE):", round(rmse, 3), "\n")
+cat("Mean Error (ME):", round(me, 3), "\n")
+```
+
+## Visualizing CV Results
+
+```{r plot_cv_results, fig.width=14, fig.height=8}
+# Observed vs Predicted
+p1 <- ggplot(cv_results, aes(x = observed, y = predicted)) +
+  geom_point(alpha = 0.5, color = "#E31C23") +
+  geom_abline(intercept = 0, slope = 1, color = "blue", linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Spatial CV: Observed vs Predicted",
+    x = "Observed",
+    y = "Predicted",
+    subtitle = paste("MAE =", round(mae, 2))
+  ) +
+  theme(plot.title = element_text(size = 12, face = "bold"))
+
+# Residuals
+p2 <- ggplot(cv_results, aes(x = error)) +
+  geom_histogram(bins = 30, fill = "#E31C23", alpha = 0.7) +
+  geom_vline(xintercept = 0, color = "blue", linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Residuals Distribution",
+    x = "Prediction Error",
+    y = "Frequency"
+  ) +
+  theme(plot.title = element_text(size = 12, face = "bold"))
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+---
+
+# Part 6: Temporal Validation (2018 Data)
+
+## Loading 2018 Crime Data
+
+```{r load_2018_crimes}
+# Download 2018 burglaries (forced entry only)
+crime_url <- "https://data.cityofchicago.org/resource/3i3m-jwuy.json"
+
+params_2018 <- list(
+  "$where" = "date_extract_year(date) = 2018 AND primary_type = 'BURGLARY' AND description LIKE '%FORCED%'",
+  "$limit" = 50000
+)
+
+response_2018 <- GET(crime_url, query = params_2018)
+crime_2018_raw <- fromJSON(content(response_2018, "text"))
+crime_2018_df <- as_tibble(crime_2018_raw)
+
+cat("2018 Crime Data Loaded:\n")
+cat("Total records:", nrow(crime_2018_df), "\n")
+```
+
+## Preparing 2018 Data
+
+```{r prepare_2018_data}
+# Clean 2018 data
+crime_2018_clean <- crime_2018_df %>%
+  filter(!is.na(longitude) & !is.na(latitude)) %>%
+  mutate(
+    longitude = as.numeric(longitude),
+    latitude = as.numeric(latitude)
+  ) %>%
+  filter(longitude > -88.5 & longitude < -87.5,
+         latitude > 41.6 & latitude < 42.1)
+
+# Convert to sf
+crime_2018_wgs84 <- st_as_sf(crime_2018_clean,
+                             coords = c("longitude", "latitude"),
+                             crs = 4326)
+
+crime_2018_utm <- st_transform(crime_2018_wgs84, crs = 32616)
+
+cat("2018 Data Cleaned:\n")
+cat("Records:", nrow(crime_2018_utm), "\n")
+```
+
+## Aggregating 2018 to Same Grid
+
+```{r aggregate_2018_to_grid}
+# Aggregate to grid
+crime_2018_grid <- fishnet_chicago %>%
+  st_join(crime_2018_utm, join = st_contains) %>%
+  group_by(grid_id) %>%
+  summarise(
+    n_crime = n(),
+    geometry = first(geometry),
+    .groups = "drop"
+  ) %>%
+  mutate(n_crime = ifelse(is.na(n_crime), 0, n_crime)) %>%
+  st_sf()
+
+cat("2018 Aggregation:\n")
+cat("Cells with crimes:", sum(crime_2018_grid$n_crime > 0), "\n")
+```
+
+## Predicting 2018 with 2017 Model
+
+```{r temporal_prediction}
+# Prepare features
+crime_2018_features <- crime_2018_grid %>%
+  st_join(
+    graffiti_grid %>%
+      select(grid_id, neighbor_mean, local_i, dist_to_hotspot),
+    join = st_intersects
+  ) %>%
+  st_drop_geometry() %>%
+  group_by(grid_id) %>%
+  slice(1) %>%
+  ungroup() %>%
+  rename(observed_2018 = n_crime)
+
+# Make predictions
+pred_2018 <- predict(selected_model, 
+                     newdata = crime_2018_features, 
+                     type = "response")
+
+temporal_results <- crime_2018_features %>%
+  mutate(
+    predicted_2018 = pred_2018,
+    error_2018 = observed_2018 - predicted_2018,
+    abs_error_2018 = abs(error_2018),
+    squared_error_2018 = error_2018^2
+  ) %>%
+  na.omit()
+
+cat("Temporal Validation:\n")
+cat("Predictions made:", nrow(temporal_results), "\n")
+```
+
+## Temporal Validation Metrics
+
+```{r temporal_error_metrics}
+# Calculate 2018 metrics
+mae_2018 <- mean(temporal_results$abs_error_2018)
+rmse_2018 <- sqrt(mean(temporal_results$squared_error_2018))
+
+cat("TEMPORAL VALIDATION (2018)\n")
+cat("=" %*% 50, "\n")
+cat("MAE:", round(mae_2018, 3), "\n")
+cat("RMSE:", round(rmse_2018, 3), "\n\n")
+
+# Comparison
+cat("SPATIAL vs TEMPORAL COMPARISON\n")
+cat("Spatial CV MAE:", round(mae, 3), "\n")
+cat("Temporal MAE:", round(mae_2018, 3), "\n")
+cat("Difference:", round(mae_2018 - mae, 3), "\n")
+```
+
+---
+
+# Part 7: Baseline Comparison and Final Evaluation
+
+## KDE Baseline
+
+```{r kde_baseline}
+# Create point pattern
+window <- as.owin(as_Spatial(chicago_utm))
+graffiti_ppp <- as.ppp(st_coordinates(graffiti_utm), W = window)
+
+# Calculate KDE
+kde_2017 <- density(graffiti_ppp, sigma = bw.diggle(graffiti_ppp))
+kde_raster <- raster(kde_2017)
+
+# Extract to grid
+grid_centroids <- st_centroid(graffiti_grid)
+kde_values <- raster::extract(kde_raster, as_Spatial(grid_centroids))
+
+# Normalize
+kde_grid_counts <- kde_values * (500 * 500) / sum(kde_values, na.rm = TRUE) * 
+                   sum(graffiti_grid$n_graffiti)
+
+kde_errors <- graffiti_grid %>%
+  st_drop_geometry() %>%
+  select(grid_id, n_graffiti) %>%
+  mutate(
+    predicted_kde = kde_grid_counts[grid_id],
+    error_kde = n_graffiti - predicted_kde,
+    abs_error_kde = abs(error_kde),
+    squared_error_kde = error_kde^2
+  ) %>%
+  na.omit()
+
+mae_kde <- mean(kde_errors$abs_error_kde)
+rmse_kde <- sqrt(mean(kde_errors$squared_error_kde))
+
+cat("KDE BASELINE\n")
+cat("=" %*% 50, "\n")
+cat("MAE:", round(mae_kde, 3), "\n")
+cat("RMSE:", round(rmse_kde, 3), "\n")
+```
+
+## Final Model Comparison
+
+```{r final_comparison, fig.width=12, fig.height=6}
+# Compare all methods
+comparison <- tibble(
+  Method = c(paste("Spatial CV -", model_name), "Temporal (2018)", "KDE Baseline"),
+  MAE = c(mae, mae_2018, mae_kde),
+  RMSE = c(rmse, rmse_2018, rmse_kde)
+)
+
+cat("\nFINAL MODEL COMPARISON\n")
+cat("=" %*% 50, "\n")
+print(comparison)
+
+cat("\nImprovement over KDE:\n")
+cat("Spatial CV:", round((1 - mae/mae_kde)*100, 1), "%\n")
+cat("Temporal:", round((1 - mae_2018/mae_kde)*100, 1), "%\n")
+
+# Visualize comparison
+comparison_long <- comparison %>%
+  pivot_longer(cols = c(MAE, RMSE), names_to = "Metric", values_to = "Value")
+
+ggplot(comparison_long, aes(x = Method, y = Value, fill = Metric)) +
+  geom_col(position = "dodge", alpha = 0.8, color = "black") +
+  geom_text(aes(label = round(Value, 2)), position = position_dodge(width = 0.9), 
+            vjust = -0.3, size = 3.5) +
+  theme_minimal() +
+  labs(
+    title = "Final Model Comparison: Error Metrics",
+    y = "Error (lower is better)"
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  theme(
+    plot.title = element_text(size = 13, face = "bold"),
+    axis.text.x = element_text(angle = 30, hjust = 1)
+  )
+```
+
+---
+
+# Part 8: Summary and Conclusions
+
+## Key Findings
+
+```{r summary}
+cat("ANALYSIS SUMMARY\n")
+cat("=" %*% 50, "\n\n")
+
+cat("1. DATA OVERVIEW\n")
+cat("   • 2017 Graffiti requests:", nrow(graffiti_utm), "\n")
+cat("   • Grid cells:", nrow(graffiti_grid), "(500m × 500m)\n")
+cat("   • Cells with graffiti:", sum(graffiti_grid$n_graffiti > 0), "\n\n")
+
+cat("2. MODEL SELECTED:", model_name, "\n")
+cat("   • Spatial CV MAE:", round(mae, 3), "\n")
+cat("   • Spatial CV RMSE:", round(rmse, 3), "\n")
+cat("   • Improvement over KDE:", round((1 - mae/mae_kde)*100, 1), "%\n\n")
+
+cat("3. TEMPORAL PERFORMANCE\n")
+cat("   • 2018 MAE:", round(mae_2018, 3), "\n")
+cat("   • Temporal stability:", ifelse(mae_2018 < mae*1.3, "Good", "Degraded"), "\n\n")
+
+cat("4. KEY SPATIAL FEATURES\n")
+for (i in 2:nrow(coef_table)) {
+  cat("   •", coef_table$term[i], "(IRR =", 
+      round(coef_table$estimate[i], 3), ")\n")
+}
+```
+
+---
+
+**Report Generated:** `r format(Sys.time(), "%Y-%m-%d %H:%M:%S")`
+
+**Course:** MUSA 5080 - Public Policy Analytics  
+**Assignment:** Lab 4 - Spatial Predictive Analysis  
+**Institution:** University of Pennsylvania
