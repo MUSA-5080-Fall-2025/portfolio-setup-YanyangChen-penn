@@ -28,8 +28,11 @@ We are NOT predicting who or what. We are predicting **WHEN**.
 
 ::::
 
-# 2. Why This Matters
+# 2. Why This Matters {.smaller}
 
+:::: {.columns}
+
+::: {.column width="50%"}
 Prevention is cheaper than crisis response
 
 - Legal aid: $5-10k per case
@@ -37,6 +40,13 @@ Prevention is cheaper than crisis response
 - Lost tax revenue, community disruption
 
 **Key insight:** Early warning → Early intervention
+:::
+
+::: {.column width="50%"}
+![](figure/slide2_cost_comparison.png){width="120%" fig-align="center"}
+:::
+
+::::
 
 # 3. Our Solution
 
