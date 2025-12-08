@@ -34,7 +34,8 @@ website:
             text: "Assignment 5"
           - href: assignments/final_project/eviction_presentation.qmd
             text: "final_project"
-
+          - href: assignments/final_project/eviction_data_analysis UPDATED.rmd
+            text: "final_project_analysis_Process"
 format:
   html:
     theme: cosmo
