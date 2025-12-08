@@ -57,6 +57,9 @@ A model that uses economic analytics to provide an **Early Warning System**.
 
 # 4. Data Integration
 
+:::: {.columns}
+
+::: {.column width="50%"}
 Predictors sourced from three datasets:
 
 1.  **Eviction Lab:** `l1_percentage_diff` (Lagged eviction pressure)
@@ -64,6 +67,13 @@ Predictors sourced from three datasets:
     - `unemployment_rate` (Economic shock)
     - `cpi` (Inflation/Cost of living)
 3.  **Urban Institute:** Household financial vulnerability indicators (e.g., debt, housing burden)
+:::
+
+::: {.column width="50%"}
+![](figure/slide4_data_flow.png){width="120%" fig-align="center"}
+:::
+
+::::
 
 # 5. Model Specification {.smaller}
 
