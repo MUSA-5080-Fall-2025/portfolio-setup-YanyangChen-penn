@@ -110,15 +110,17 @@ Predictors sourced from three datasets:
 
 ::::
 
-# 8. Prediction Capabilities
+# 8. Prediction Capabilities {.smaller}
 
-**What the model PREDICTS:**
-✅ **Early Warnings:** Signals upcoming months of high stress.
-✅ **Periods of Change:** Identifies *when* intensity of resources should be deployed.
+**What the model predicts WELL:**
 
-**What the model does NOT predict:**
-❌ **Specific Points:** Does not predict specific houses or addresses.
-❌ **Locations:** Does not predict specific neighborhoods or blocks (Citywide temporal index).
+- **Early Warnings:** Signals upcoming months of high eviction stress 1-3 months in advance, enabling proactive resource deployment. Out-of-sample validation (RMSE = 0.1833) confirms stable performance on unseen economic conditions.
+- **Temporal Patterns:** Identifies *when* intensity of resources should be deployed by explaining ~80% of month-to-month variation in eviction filings (R² = 0.7975).
+
+**What the model does NOT predict well:**
+
+- **Spatial Specificity:** Cannot pinpoint specific houses, addresses, or neighborhoods. This is a citywide temporal index, not a localized forecasting tool.
+- **Exogenous Policy Shocks:** Cannot forecast unexpected policy decisions (e.g., new moratoriums) that fall outside economic modeling.
 
 # 9. Critical Limitations
 

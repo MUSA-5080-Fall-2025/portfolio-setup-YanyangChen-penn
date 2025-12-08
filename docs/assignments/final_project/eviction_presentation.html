@@ -238,10 +238,18 @@ Josh, Zhe Fang, Zicheng Xiang, Yanyang Chen
 </div></div>
 </section>
 
-<section id="prediction-capabilities" class="title-slide slide level1 center">
+<section id="prediction-capabilities" class="title-slide slide level1 smaller center">
 <h1>8. Prediction Capabilities</h1>
-<p><strong>What the model PREDICTS:</strong> ✅ <strong>Early Warnings:</strong> Signals upcoming months of high stress. ✅ <strong>Periods of Change:</strong> Identifies <em>when</em> intensity of resources should be deployed.</p>
-<p><strong>What the model does NOT predict:</strong> ❌ <strong>Specific Points:</strong> Does not predict specific houses or addresses. ❌ <strong>Locations:</strong> Does not predict specific neighborhoods or blocks (Citywide temporal index).</p>
+<p><strong>What the model predicts WELL:</strong></p>
+<ul>
+<li><strong>Early Warnings:</strong> Signals upcoming months of high eviction stress 1-3 months in advance, enabling proactive resource deployment. Out-of-sample validation (RMSE = 0.1833) confirms stable performance on unseen economic conditions.</li>
+<li><strong>Temporal Patterns:</strong> Identifies <em>when</em> intensity of resources should be deployed by explaining ~80% of month-to-month variation in eviction filings (R² = 0.7975).</li>
+</ul>
+<p><strong>What the model does NOT predict well:</strong></p>
+<ul>
+<li><strong>Spatial Specificity:</strong> Cannot pinpoint specific houses, addresses, or neighborhoods. This is a citywide temporal index, not a localized forecasting tool.</li>
+<li><strong>Exogenous Policy Shocks:</strong> Cannot forecast unexpected policy decisions (e.g., new moratoriums) that fall outside economic modeling.</li>
+</ul>
 </section>
 
 <section id="critical-limitations" class="title-slide slide level1 center">
