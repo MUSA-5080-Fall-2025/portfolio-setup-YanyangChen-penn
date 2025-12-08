@@ -55,7 +55,7 @@ A model that uses economic analytics to provide an **Early Warning System**.
 - Focuses on identifying periods of heightened risk.
 - Allows policymakers to prepare resources *before* the surge hits.
 
-# 4. Data Integration
+# 4. Data Integration {.smaller}
 
 :::: {.columns}
 
@@ -70,7 +70,7 @@ Predictors sourced from three datasets:
 :::
 
 ::: {.column width="50%"}
-![](figure/slide4_data_flow.png){width="120%" fig-align="center"}
+![](figure/slide4_data_flow.png){width="150%" fig-align="center"}
 :::
 
 ::::
@@ -110,22 +110,20 @@ Predictors sourced from three datasets:
 
 :::: {.columns}
 
-::: {.column width="55%" style="font-size: 90%;"}
+::: {.column width="50%" style="font-size: 85%;"}
 **Metric Breakdown:**
 
 - **Left: In-Sample** (Jan 2020 - Dec 2022)
   - **MAE:** 0.1225 | **RMSE:** 0.1711
   - *Observation:* Model accurately captures historical month-to-month deviations.
 
-<br>
-
 - **Right: Out-of-Sample** (Jan 2023 - Present)
   - **MAE:** 0.1532 | **RMSE:** 0.1833
   - *Observation:* Performance remains stable when forecasting unseen economic conditions.
 :::
 
-::: {.column width="45%"}
-![](figure/2.png){width="100%" fig-align="center"}
+::: {.column width="50%"}
+![](figure/2.png){width="180%" fig-align="center"}
 :::
 
 ::::
