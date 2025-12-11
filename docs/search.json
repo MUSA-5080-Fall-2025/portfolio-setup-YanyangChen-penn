@@ -513,9 +513,9 @@
   {
     "objectID": "weekly-notes/week-01-notes.html",
     "href": "weekly-notes/week-01-notes.html",
-    "title": "Week 1 Notes - Course Introduction",
+    "title": "MUSA 5080 | Week 1 Survival Notes (R Edition)",
     "section": "",
-    "text": "select() - choose columns - filter() - choose rows - mutate() - create new variables - summarize() - calculate statistics - group_by() - operate on groups ## Coding Techniques - [New R functions or approaches] - [Quarto features learned]"
+    "text": "Note\n\n\n\nThe course philosophy emphasizes that public policy analysis requires focusing on transparency and interpretability over mere optimization, especially concerning public goods, governance, and equity.\n\n\n\n\nThese functions are consistent: the first argument is the data frame, subsequent arguments describe columns (using variable names without quotes), and the output is always a new data frame.\n\n**select()**: Choose columns.\n**filter()**: Choose rows.\n**mutate()**: Create new variables.\n**summarize()**: Calculate statistics (This collapses rows).\n**group_by()**: Set up grouping (This does not change rows, only prepares the data).\n\n\n\n\n\nGit / GitHub: A version control system and cloud hosting platform. It acts as a “time machine” and collaboration tool for code projects.\nQuarto: A publishing system that combines code, text, and output into professional documents. This is the key to reproducible research.\nTibbles: Enhanced data frames used by Tidyverse, featuring smarter printing and display of column types."
   },
   {
     "objectID": "weekly-notes/week-01-notes.html#key-concepts-learned",
@@ -670,5 +670,19 @@
     "title": "Indego Bike Share Demand Prediction: Complete Analysis",
     "section": "Overall Assessment",
     "text": "Overall Assessment\nThis analysis demonstrates a working demand prediction system for Indego bike share with meaningful limitations and clear improvement pathways.\n\nKey Findings:\n\nSeasonal Effect is Dominant: Q2 (warm) vs Q1 (cold) demand differs by 2x\nRandom Forest Outperforms: Non-linear models capture complex demand patterns\nFeature Engineering Matters: New features improved predictions by 10-20%\nEquity Risk is Real: Low-income neighborhoods harder to predict = worse service\nDeployment Readiness: Support tool ✓ | Autonomous system ✗\n\n\n\nCritical Next Steps:\n\n✅ Implement equity audits\n✅ Add real-time monitoring\n✅ Integrate external data (events, weather APIs)\n✅ Monthly retraining\n✅ Transparency & community engagement\n\nFinal Recommendation: Deploy as decision-support system with human oversight and mandatory equity safeguards."
+  },
+  {
+    "objectID": "weekly-notes/week-01-notes.html#key-concepts-learned-what-i-nailed-this-week",
+    "href": "weekly-notes/week-01-notes.html#key-concepts-learned-what-i-nailed-this-week",
+    "title": "MUSA 5080 | Week 1 Survival Notes (R Edition)",
+    "section": "",
+    "text": "Note\n\n\n\nThe course philosophy emphasizes that public policy analysis requires focusing on transparency and interpretability over mere optimization, especially concerning public goods, governance, and equity.\n\n\n\n\nThese functions are consistent: the first argument is the data frame, subsequent arguments describe columns (using variable names without quotes), and the output is always a new data frame.\n\n**select()**: Choose columns.\n**filter()**: Choose rows.\n**mutate()**: Create new variables.\n**summarize()**: Calculate statistics (This collapses rows).\n**group_by()**: Set up grouping (This does not change rows, only prepares the data).\n\n\n\n\n\nGit / GitHub: A version control system and cloud hosting platform. It acts as a “time machine” and collaboration tool for code projects.\nQuarto: A publishing system that combines code, text, and output into professional documents. This is the key to reproducible research.\nTibbles: Enhanced data frames used by Tidyverse, featuring smarter printing and display of column types."
+  },
+  {
+    "objectID": "weekly-notes/week-01-notes.html#coding-techniques-my-new-superpowers",
+    "href": "weekly-notes/week-01-notes.html#coding-techniques-my-new-superpowers",
+    "title": "MUSA 5080 | Week 1 Survival Notes (R Edition)",
+    "section": "Coding Techniques (My New Superpowers)",
+    "text": "Coding Techniques (My New Superpowers)\n\nThe Pipe %&gt;% (or |&gt;)\nThe pipe is the magic of dplyr. It reads as “and then…” and takes the output from the left side, feeding it as the first argument to the function on the right.\n``r # The clean, readable pipeline flow: car_summary &lt;- data %&gt;%   filter(Year of manufacture` &gt;= 2020) %&gt;% # Then, filter select(Manufacturer, Model, Price) %&gt;% # Then, select group_by(Manufacturer) %&gt;% # Then, group summarize(avg_price = mean(Price)) # Then, summarize"
   }
 ]

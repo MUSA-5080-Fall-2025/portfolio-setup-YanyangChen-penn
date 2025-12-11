@@ -1,25 +1,43 @@
 ---
-title: "Week 1 Notes - Course Introduction"
+title: "MUSA 5080 | Week 1 Survival Notes (R Edition)"
 date: "2025-09-08"
+author: "Your Name Here"
+format: html 
+editor: visual
 ---
 
-## Key Concepts Learned
- `select()` - choose columns
-- `filter()` - choose rows
-- `mutate()` - create new variables
-- `summarize()` - calculate statistics
-- `group_by()` - operate on groups
-## Coding Techniques
-- [New R functions or approaches]
-- [Quarto features learned]
+##  Key Concepts Learned (What I Nailed This Week)
 
-## Questions & Challenges
-- [What I didn't fully understand]
-- [Areas needing more practice]
+::: callout-note
+The course philosophy emphasizes that public policy analysis requires focusing on **transparency** and **interpretability** over mere optimization, especially concerning public goods, governance, and equity.
+:::
 
-## Connections to Policy
-- [How this week's content applies to real policy work]
+###  The Tidyverse & The Big 5 `dplyr` Verbs
 
-## Reflection
-- [What was most interesting]
-- [How I'll apply this knowledge]
+These functions are consistent: the first argument is the data frame, subsequent arguments describe columns (using variable names without quotes), and the output is always a new data frame.
+
+* `**select()**`: Choose columns.
+* `**filter()**`: Choose rows.
+* `**mutate()**`: Create new variables.
+* `**summarize()**`: Calculate statistics (This **collapses rows**).
+* `**group_by()**`: Set up grouping (This **does not change rows**, only prepares the data).
+
+### ️ Professional Tools & Workflow
+
+* **Git / GitHub**: A **version control system** and cloud hosting platform. It acts as a **"time machine"** and collaboration tool for code projects.
+* **Quarto**: A **publishing system** that combines code, text, and output into professional documents. This is the key to **reproducible research**.
+* **Tibbles**: Enhanced data frames used by Tidyverse, featuring smarter printing and display of column types.
+
+##  Coding Techniques (My New Superpowers)
+
+###  The Pipe `%>%` (or `|>`)
+
+The pipe is the magic of `dplyr`. It reads as **"and then..."** and takes the output from the left side, feeding it as the **first argument** to the function on the right.
+
+```r
+# The clean, readable pipeline flow:
+car_summary <- data %>%
+  filter(`Year of manufacture` >= 2020) %>%    # Then, filter
+  select(Manufacturer, Model, Price) %>%       # Then, select
+  group_by(Manufacturer) %>%                   # Then, group
+  summarize(avg_price = mean(Price))           # Then, summarize

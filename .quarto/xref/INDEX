@@ -28,5 +28,14 @@
   },
   "assignments/final_project/eviction_presentation.qmd": {
     "eviction_presentation.html": "640625c4"
+  },
+  "assignments/final_project_analysis_process/eviction_data_analysis.rmd": {
+    "eviction_data_analysis.html": "00cc6f56"
+  },
+  "assignments/final_project_analysis_process/README .md": {
+    "README .html": "443f677f"
+  },
+  "docs/assignments/final_project/eviction_presentation.qmd": {
+    "eviction_presentation.html": "2db6dd38"
   }
 }

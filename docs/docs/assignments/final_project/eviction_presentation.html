@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Josh, Zhe Fang, Zicheng Xiang, Yanyang Chen">
+<meta name="dcterms.date" content="2025-12-08">
+
+<title>Predicting Eviction Crises in Philadelphia – Yanyang Chen - MUSA 5080 Portfolio</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-ddd961a2510921635943dfbbd19534c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Yanyang Chen - MUSA 5080 Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-weekly-notes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Weekly Notes</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-weekly-notes">    
+        <li>
+    <a class="dropdown-item" href="../../../weekly-notes/index.html">
+ <span class="dropdown-text">All Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../weekly-notes/week-01-notes.html">
+ <span class="dropdown-text">Week 1 Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../weekly-notes/week-02-notes.qmd">
+ <span class="dropdown-text">Week 2 Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../weekly-notes/week-03-notes.qmd">
+ <span class="dropdown-text">Week 3 Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../weekly-notes/week-04-notes.qmd">
+ <span class="dropdown-text">Week 4 Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../weekly-notes/week-05-notes.qmd">
+ <span class="dropdown-text">Week 5 Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../weekly-notes/week-06-notes.qmd">
+ <span class="dropdown-text">Week 6 Notes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../weekly-notes/week-07-notes.qmd">
+ <span class="dropdown-text">Week 7 Notes</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../../../labs/lab1/policy_lab1.qmd">
+ <span class="dropdown-text">Lab 1</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-assignments" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Assignments</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-assignments">    
+        <li>
+    <a class="dropdown-item" href="../../../assignments/assignment_1/assignment1.html">
+ <span class="dropdown-text">Assignment 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/assignment_2/assignment2.html">
+ <span class="dropdown-text">Assignment 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/assignment_3/assignment3.qmd">
+ <span class="dropdown-text">Assignment 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/assignment_4/assignment4.html">
+ <span class="dropdown-text">Assignment 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/assignment_5/assignment5.html">
+ <span class="dropdown-text">Assignment 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/final_project/eviction_presentation.html">
+ <span class="dropdown-text">final_project</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../assignments/final_project/eviction_data_analysis.rmd">
+ <span class="dropdown-text">final_project_analysis_process</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-policy-problem" id="toc-the-policy-problem" class="nav-link active" data-scroll-target="#the-policy-problem">1. The Policy Problem</a></li>
+  <li><a href="#why-this-matters" id="toc-why-this-matters" class="nav-link" data-scroll-target="#why-this-matters">2. Why This Matters</a></li>
+  <li><a href="#our-solution" id="toc-our-solution" class="nav-link" data-scroll-target="#our-solution">3. Our Solution</a></li>
+  <li><a href="#data-integration" id="toc-data-integration" class="nav-link" data-scroll-target="#data-integration">4. Data Integration</a></li>
+  <li><a href="#model-specification" id="toc-model-specification" class="nav-link" data-scroll-target="#model-specification">5. Model Specification</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">6. Results</a></li>
+  <li><a href="#validation-strategy" id="toc-validation-strategy" class="nav-link" data-scroll-target="#validation-strategy">7. Validation Strategy</a></li>
+  <li><a href="#prediction-capabilities" id="toc-prediction-capabilities" class="nav-link" data-scroll-target="#prediction-capabilities">8. Prediction Capabilities</a></li>
+  <li><a href="#critical-limitations" id="toc-critical-limitations" class="nav-link" data-scroll-target="#critical-limitations">9. Critical Limitations</a></li>
+  <li><a href="#required-safeguards" id="toc-required-safeguards" class="nav-link" data-scroll-target="#required-safeguards">10. Required Safeguards</a></li>
+  <li><a href="#implementation-roadmap" id="toc-implementation-roadmap" class="nav-link" data-scroll-target="#implementation-roadmap">11. Implementation Roadmap</a></li>
+  <li><a href="#recommendation" id="toc-recommendation" class="nav-link" data-scroll-target="#recommendation">12. Recommendation</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="eviction_presentation.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Predicting Eviction Crises in Philadelphia</h1>
+<p class="subtitle lead">Early Warning System Using Macroeconomic Data</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Josh, Zhe Fang, Zicheng Xiang, Yanyang Chen </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 8, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-policy-problem" class="level1 smaller">
+<h1 class="smaller">1. The Policy Problem</h1>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><strong>What we are predicting:</strong> We are NOT predicting who or what. We are predicting <strong>WHEN</strong>.</p>
+<ul>
+<li><strong>Goal:</strong> Determine if eviction rates respond to economic disruptions.</li>
+<li><strong>Dependent Variable:</strong> <code>percentage_diff</code> (Deviation from historical baseline).</li>
+<li><strong>Context:</strong> Communities vulnerable to immediate budget stress are most affected.</li>
+</ul>
+</div><div class="column" style="width:40%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figure/1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="why-this-matters" class="level1 smaller">
+<h1 class="smaller">2. Why This Matters</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Prevention is cheaper than crisis response</p>
+<ul>
+<li>Legal aid: $5-10k per case</li>
+<li>Homelessness services: $50k+ per family</li>
+<li>Lost tax revenue, community disruption</li>
+</ul>
+<p><strong>Key insight:</strong> Early warning → Early intervention</p>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figure/slide2_cost_comparison.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:120.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="our-solution" class="level1">
+<h1>3. Our Solution</h1>
+<p>A model that uses economic analytics to provide an <strong>Early Warning System</strong>.</p>
+<ul>
+<li>Focuses on identifying periods of heightened risk.</li>
+<li>Allows policymakers to prepare resources <em>before</em> the surge hits.</li>
+</ul>
+</section>
+<section id="data-integration" class="level1 smaller">
+<h1 class="smaller">4. Data Integration</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Predictors sourced from three datasets:</p>
+<ol type="1">
+<li><strong>Eviction Lab:</strong> <code>l1_percentage_diff</code> (Lagged eviction pressure)</li>
+<li><strong>BLS (Macroeconomic):</strong>
+<ul>
+<li><code>unemployment_rate</code> (Economic shock)</li>
+<li><code>cpi</code> (Inflation/Cost of living)</li>
+</ul></li>
+<li><strong>Urban Institute:</strong> Household financial vulnerability indicators (e.g., debt, housing burden)</li>
+</ol>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figure/slide4_data_flow.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:150.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-specification" class="level1 smaller">
+<h1 class="smaller">5. Model Specification</h1>
+<p><strong>Ordinary Least Squares (OLS)</strong> selected because outcome is continuous and symmetric.</p>
+<p><strong>Dependent Variable:</strong> <code>percentage_diff</code> - Measures how monthly eviction filings deviate from a historical baseline. - Focus is on modeling <em>unexpected</em> increases/decreases.</p>
+<p><strong>Predictors:</strong> - <strong>Lagged eviction pressure:</strong> <code>l1_percentage_diff</code> (Accounts for persistence). - <strong>Macroeconomic conditions:</strong> <code>unemployment_rate</code>, <code>cpi</code>. - <strong>Household financial vulnerability:</strong> Variables distinguishing short-term disruption from structural conditions.</p>
+</section>
+<section id="results" class="level1 smaller">
+<h1 class="smaller">6. Results</h1>
+<p><strong>Model Performance:</strong> - <strong>R²: 0.7975</strong> (Explains ~80% of variation)</p>
+<p><strong>Key Findings on Coefficients:</strong> 1. <strong>Lagged Eviction Pressure:</strong> Positive and highly significant. - <em>Meaning:</em> Strong persistence; once pressure rises, it tends to continue. 2. <strong>Unemployment:</strong> Statistically significant negative coefficient. - <em>Meaning:</em> Consistent with income shock theory regarding deviations from baseline. 3. <strong>CPI:</strong> Positive but not statistically significant. - <em>Meaning:</em> Short-run inflation effects are less immediate than labor market shocks.</p>
+<p><strong>Note on Urban Institute Data:</strong> - Variables were dropped from coefficients due to perfect collinearity (they act as baseline constants), but serve as structural context.</p>
+</section>
+<section id="validation-strategy" class="level1 smaller">
+<h1 class="smaller">7. Validation Strategy</h1>
+<p><strong>Comparison of Prediction Errors:</strong></p>
+<div class="columns">
+<div class="column" style="font-size: 85%;">
+<p><strong>Metric Breakdown:</strong></p>
+<ul>
+<li><strong>Left: In-Sample</strong> (Jan 2020 - Dec 2022)
+<ul>
+<li><strong>MAE:</strong> 0.1225 | <strong>RMSE:</strong> 0.1711</li>
+<li><em>Observation:</em> Model accurately captures historical month-to-month deviations.</li>
+</ul></li>
+<li><strong>Right: Out-of-Sample</strong> (Jan 2023 - Present)
+<ul>
+<li><strong>MAE:</strong> 0.1532 | <strong>RMSE:</strong> 0.1833</li>
+<li><em>Observation:</em> Performance remains stable when forecasting unseen economic conditions.</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figure/2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:180.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="prediction-capabilities" class="level1 smaller">
+<h1 class="smaller">8. Prediction Capabilities</h1>
+<p><strong>What the model predicts WELL:</strong></p>
+<ul>
+<li><strong>Early Warnings:</strong> Signals upcoming months of high eviction stress 1-3 months in advance, enabling proactive resource deployment. Out-of-sample validation (RMSE = 0.1833) confirms stable performance on unseen economic conditions.</li>
+<li><strong>Temporal Patterns:</strong> Identifies <em>when</em> intensity of resources should be deployed by explaining ~80% of month-to-month variation in eviction filings (R² = 0.7975).</li>
+</ul>
+<p><strong>What the model does NOT predict well:</strong></p>
+<ul>
+<li><strong>Spatial Specificity:</strong> Cannot pinpoint specific houses, addresses, or neighborhoods. This is a citywide temporal index, not a localized forecasting tool.</li>
+<li><strong>Exogenous Policy Shocks:</strong> Cannot forecast unexpected policy decisions (e.g., new moratoriums) that fall outside economic modeling.</li>
+</ul>
+</section>
+<section id="critical-limitations" class="level1">
+<h1>9. Critical Limitations</h1>
+<p><strong>Temporal vs.&nbsp;Spatial:</strong> - The model successfully predicts citywide temporal fluctuations (time). - It <strong>does not</strong> capture neighborhood-level variation (space) because the financial vulnerability data is static over the modeled time period.</p>
+<p><strong>Policy Shocks:</strong> - Cannot predict exogenous policy decisions (e.g., new moratoriums) that are not economic in nature.</p>
+</section>
+<section id="required-safeguards" class="level1">
+<h1>10. Required Safeguards</h1>
+<p><strong>Can’t deploy without these:</strong></p>
+<ol type="1">
+<li><strong>Community Oversight Board</strong> - Tenant orgs, legal aid, Council members (veto power).</li>
+<li><strong>Annual Bias Audits</strong> - Public reporting of model accuracy.</li>
+<li><strong>Prevention-only use</strong> - Never for enforcement.</li>
+<li><strong>Transparency</strong> - Public code, equations, predictions.</li>
+</ol>
+</section>
+<section id="implementation-roadmap" class="level1">
+<h1>11. Implementation Roadmap</h1>
+<p><strong>Phase 1 (Months 1-3):</strong> Form oversight board, run in shadow mode.</p>
+<p><strong>Phase 2 (Months 4-12):</strong> Public launch, coordinate with legal aid + rental assistance.</p>
+<p><strong>Phase 3 (Year 2+):</strong> Evaluate outcomes, refine.</p>
+<p><strong>Cost-benefit:</strong> High ROI by targeting prevention resources efficiently.</p>
+</section>
+<section id="recommendation" class="level1">
+<h1>12. Recommendation</h1>
+<p><strong>Deploy as a Monthly Index</strong></p>
+<ul>
+<li>Use the predictions as a <strong>Monthly Eviction Pressure Index</strong>.</li>
+<li><strong>Action:</strong> Update data monthly to monitor changes from month-to-month.</li>
+<li><strong>Resource Deployment:</strong> Use the index to determine <em>when</em> intensity of resources (legal aid, funding) should be scaled up.</li>
+</ul>
+<p><strong>Condition:</strong> Must be paired with the safeguards listed in Slide 10.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
