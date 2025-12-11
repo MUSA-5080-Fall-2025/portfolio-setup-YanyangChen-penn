@@ -1,0 +1,68 @@
+---
+title: "MUSA 5080 | Week 5 Notes (Introduction to Linear Regression)"
+date: "2025-10-06"
+author: "yanyang chen"
+format: html 
+editor: visual
+---
+
+##  Key Concepts Learned (Core Takeaways)
+
+### The Statistical Learning Framework
+
+-   **The Goal**: Estimate the systematic relationship ($Y = f(X) + \epsilon$) between a quantitative response ($Y$) and predictors ($X$). We are trying to estimate the true, fixed, but unknown function $f$.
+
+\[Image of statistical learning framework\]
+
+-   **Two Purposes**:
+    -   **Prediction**: Estimate $Y$ for new observations, focusing on the accuracy of the forecast (Prediction intervals).
+    -   **Inference**: Understand **how** $X$ affects $Y$, focusing on interpreting the coefficients (Statistical significance).
+-   **Approach**: We use **Parametric Methods** (like Linear Regression), which assume a functional form (linear) and estimate a few parameters ($\beta$ coefficients).
+
+### Building a Linear Model
+
+-   **The Assumption**: The relationship between $X$ and $Y$ is linear ($Y \approx \beta_0 + \beta_1X$).
+-   **The Method**: Ordinary Least Squares (OLS) estimates the $\beta$ coefficients.
+-   **Interpretation**:
+    -   **Intercept (**$\beta_0$): Expected $Y$ when $X=0$.
+    -   **Slope (**$\beta_1$): Change in $Y$ for a one-unit increase in $X$.
+
+### Model Evaluation and Ethics
+
+-   **In-Sample Fit (**$R^2$): Percentage of variation in $Y$ explained by $X$. **Warning**: A high $R^2$ alone doesn't guarantee a trustworthy model.
+-   **Overfitting**: When the model memorizes the training data (high variance) and performs poorly on new data.
+
+\[Image of overfitting in regression model\]
+
+-   **Solution**: **Train/Test Split** or **Cross-Validation (CV)**. CV (e.g., 10-fold) gives a more stable estimate of true prediction performance.
+-   **Metric**: **RMSE** (Root Mean Square Error) or **MAE** (Mean Absolute Error) on the test set—this measures the typical prediction error on new data.
+-   **Ethical Check**: A model can be statistically "good" (high $R^2$) while being ethically terrible (e.g., amplifying existing discrimination).
+
+##  Coding Techniques (R Skills: Diagnostics & Improvement)
+
+### Checking Assumptions (Diagnostics)
+
+Diagnostics must be checked **before** trusting the model.
+
+1.  **Linearity**: Check with a **Residual Plot** (Residuals vs. Fitted Values).
+    -   **Bad**: Curved pattern means the model is missing a systematic relationship and predictions are biased.
+2.  **Constant Variance (Homoscedasticity)**: Check with the residual plot (spread should be constant) or the **Breusch-Pagan Test**.
+    -   **Heteroscedasticity (Bad)**: Variance changes across $X$. Solutions include transforming $Y$ or adding missing variables.
+3.  **No Multicollinearity**: Use **VIF** (Variance Inflation Factor) in multiple regression (VIF \> 10 suggests problems).
+4.  **No Influential Outliers**: Use **Cook’s Distance** (Cook's D).
+    -   **Policy Connection**: An influential observation could represent a **marginalized community**; automatically removing it can lead to biased policy decisions.
+
+### Improving the Model
+
+-   **Log Transformations**: Used when the relationship is curved or to address heteroscedasticity.
+-   **Categorical Variables**: R creates **dummy variables** automatically when adding a factor variable to the model.
+
+##  Summary: The Regression Workflow
+
+1.  **Understand the framework**: What's $f$? What is the goal (Prediction vs. Inference)?.
+2.  **Visualize first**: Does a linear model make sense?.
+3.  **Fit the model**: Estimate coefficients.
+4.  **Evaluate performance**: Train/test split, cross-validation (RMSE, MAE).
+5.  **Check assumptions**: Residual plots, VIF, outliers.
+6.  **Improve if needed**: Transformations, more variables.
+7.  **Consider ethics**: Who could be harmed by this model?.

@@ -10,16 +10,16 @@ editor: visual
 
 ### 🗺️ Why Spatial Analysis Matters
 
-* **Missing Piece**: We previously worked with *what* is happening (income, education) but not **WHERE** it is happening. Spatial analysis answers critical questions like: Are low-income communities clustered? Are they near resources?.
-* **Algorithmic Fairness**: Geographic bias exists in algorithms (e.g., rideshare avoiding areas, crime prediction concentrating enforcement). Understanding spatial patterns is necessary to design **fairer systems**.
+-   **Missing Piece**: We previously worked with *what* is happening (income, education) but not **WHERE** it is happening. Spatial analysis answers critical questions like: Are low-income communities clustered? Are they near resources?.
+-   **Algorithmic Fairness**: Geographic bias exists in algorithms (e.g., rideshare avoiding areas, crime prediction concentrating enforcement). Understanding spatial patterns is necessary to design **fairer systems**.
 
 ### 📐 Spatial Data Fundamentals (`sf` package)
 
-* **Vector Data Model**: The real world is represented by simplified geometric types:
-    * **Points**: Locations (hospitals, incidents) .
-    * **Lines**: Linear features (roads, transit routes).
-    * **Polygons**: Areas (census tracts, neighborhoods).
-* **The `sf` Package**: The modern standard in R. Spatial data is viewed simply as a standard `data.frame` with an extra **geometry column**.
+-   **Vector Data Model**: The real world is represented by simplified geometric types:
+    -   **Points**: Locations (hospitals, incidents) .
+    -   **Lines**: Linear features (roads, transit routes).
+    -   **Polygons**: Areas (census tracts, neighborhoods).
+-   **The `sf` Package**: The modern standard in R. Spatial data is viewed simply as a standard `data.frame` with an extra **geometry column**.
 
 ## 💻 Coding Techniques (R Skills: Spatial Operations)
 
@@ -27,21 +27,20 @@ editor: visual
 
 This function extracts features based on a spatial relationship, using the `.predicate` parameter.
 
-* **Key Function**: `st_filter(data_to_filter, reference_geometry, .predicate = relationship)`.
-* **Predicates**:
-    * `st_intersects`: Any overlap (default). Used for: "Which counties are affected by flooding?".
-    * `st_touches`: Share a boundary, no interior overlap. Used for: "Which counties border Allegheny?".
-    * `st_within`: Completely inside. Used for: "Schools within district boundaries".
-    * **Note**: Using `st_intersects` includes the reference feature itself.
+-   **Key Function**: `st_filter(data_to_filter, reference_geometry, .predicate = relationship)`.
+-   **Predicates**:
+    -   `st_intersects`: Any overlap (default). Used for: "Which counties are affected by flooding?".
+    -   `st_touches`: Share a boundary, no interior overlap. Used for: "Which counties border Allegheny?".
+    -   `st_within`: Completely inside. Used for: "Schools within district boundaries".
+    -   **Note**: Using `st_intersects` includes the reference feature itself.
 
 ### 🤝 Spatial Joins (`st_join()`)
 
 Combines two datasets based on a spatial relationship instead of a shared ID.
 
-* **Use Case**: Joining a table of demographic data (non-spatial) to a polygon layer (spatial) based on the `GEOID`.
+-   **Use Case**: Joining a table of demographic data (non-spatial) to a polygon layer (spatial) based on the `GEOID`.
 
 ### 📏 Distance and Area Calculations
 
-* **Area**: `st_area(geometry)`. **Units depend on the CRS!**.
-* **Distance**: `st_distance(geometry1, geometry2)`.
-
+-   **Area**: `st_area(geometry)`. **Units depend on the CRS!**.
+-   **Distance**: `st_distance(geometry1, geometry2)`.

@@ -1,0 +1,54 @@
+---
+title: "MUSA 5080 | Week 9 Notes (Critical Perspectives on Predictive Policing)"
+date: "2025-11-03"
+author: "Your Name Here"
+format: html
+editor: visual
+---
+
+##  Key Concepts Learned (Core Takeaways)
+
+###  The Critical View: Dirty Data and Feedback Loops
+
+- **The Fundamental Question**: Before asking *how* to build predictive policing systems, we must ask: **SHOULD we?** A statistically 'good' model can still be socially harmful.
+- **"Dirty Data" Defined**: Data derived from or influenced by corrupt, biased, and unlawful practices, including data intentionally manipulated (juked) or distorted by societal biases.
+- **Sources of Dirty Data**:
+    - **Fabricated/Manipulated**: False arrests, downgraded crime classifications ("juking the stats").
+    - **Systematically Biased**: Over-policing of certain communities leads to more recorded crime, while under-policing of white-collar crime makes it appear less common.
+    - **Proxy Problems**: Arrests $\neq$ crimes committed; Calls for service $\neq$ actual need.
+- **The Feedback Loop**:
+    1. Algorithm predicts crime in neighborhood X (due to biased past data).
+    2. Police are deployed to neighborhood X.
+    3. More arrests/reports are generated in X.
+    4. The algorithm learns, "We were right about neighborhood X!" and intensifies the cycle. 
+###  The Impossibility of Neutral Crime Data
+
+- **Crime Data is Socially Constructed**: Societies define what counts as crime.
+- **Crime Data Reflects Policing Patterns**: It reveals where policing resources are deployed, not necessarily where all crime is committed.
+- **What is Missed**: Crime data misses crimes with low reporting rates (e.g., less than half of violent crimes are reported) and ignores crimes like **wage theft** or **corporate fraud**, which are often far more costly.
+
+##  Coding Techniques (R Skills: Count Regression & Local Clustering)
+
+###  Local Spatial Autocorrelation (LISA)
+
+- **Purpose**: Global Moran's I tells *if* clustering exists; Local Moran's I (LISA) tells **WHERE** clusters are located.
+- **The Moran Scatterplot**: Visualizes Local Moran's I by comparing standardized value (X-axis) against its spatial lag (Y-axis).
+    - **Quadrant I (High-High)**: High value surrounded by high values $\rightarrow$ **Hotspot**.
+    - **Quadrant III (Low-Low)**: Low value surrounded by low values $\rightarrow$ **Coldspot**.
+    - **Quadrants II & IV**: Outliers (Low-High or High-Low). - **Spatial Weights (W)**: Must be defined before LISA. For a fishnet grid, **Queen Contiguity** (sharing edges or vertices) is often used, followed by **Row Standardization** to ensure all rows sum to 1.
+
+###  Count Regression (Poisson & Negative Binomial)
+
+- **Problem with OLS**: Linear regression can predict negative counts, assumes constant variance, and assumes normal errors, which is inappropriate for crime counts.
+- **Poisson Regression**: Appropriate for count data where the **Mean = Variance ($\lambda$)**.
+    - **Model Form**: $\log(\lambda_i) = \beta_0 + \beta_1 X_{1i} + ...$. The log link ensures predictions ($\lambda_i$) are always positive.
+    - **Interpretation**: $\exp(\beta_1)$ is the multiplicative effect on the expected count.
+- **Overdispersion**: Crime data often exhibits **Variance > Mean**. If the Dispersion Parameter ($\frac{\text{Residual Deviance}}{\text{Degrees of Freedom}}$) is significantly greater than 1 (e.g., > 3), Poisson is inappropriate.
+- **Negative Binomial (NegBin)**: Recommended when overdispersion is present.
+    - **Assumption**: Relaxes the Mean = Variance assumption by adding a **dispersion parameter ($\alpha$)**.
+    - **R Implementation**: Use `glm.nb()` from the `MASS` package.
+
+### ️ Spatial Cross-Validation (LOGO-CV)
+
+- **Standard CV Failure**: Standard $k$-fold CV fails with spatial data due to **Spatial Leakage** (training data includes neighbors of test data), resulting in overly optimistic performance estimates.
+- **LOGO-CV Solution**: **Leave-One-Group-Out (LOGO) Cross-Validation** holds out entire spatial groups (e.g., police districts) to test the model's ability to generalize to truly new areas.
