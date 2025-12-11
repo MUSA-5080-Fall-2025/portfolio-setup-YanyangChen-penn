@@ -10,5 +10,11 @@ Welcome to my weekly notes for MUSA 5080 - Public Policy Analytics. Here you'll 
 
 - [Week 1 Notes](week-01-notes.qmd)
 - [Week 2 Notes](week-02-notes.qmd)
+- [Week 3 Notes](week-03-notes.qmd)
+- [Week 4 Notes](week-04-notes.qmd)
+- [Week 5 Notes](week-05-notes.qmd)
+- [Week 6 Notes](week-06-notes.qmd)
+- [Week 7 Notes](week-07-notes.qmd)
+- [Week 8 Notes](week-08-notes.qmd)
 
 More notes will be added as the course progresses.
