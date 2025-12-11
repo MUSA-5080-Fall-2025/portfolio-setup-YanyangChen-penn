@@ -6,51 +6,48 @@ format: html
 editor: visual
 ---
 
-##  Key Concepts Learned (Core Takeaways)
+## Key Concepts Learned (Core Takeaways)
 
-###  Expanding the Regression Toolkit
+### Expanding the Regression Toolkit
 
-* **Baseline Problem**: A simple structural model (e.g., price ~ size) typically has very low $R^2$ (e.g., 0.13), indicating most variation is unexplained. We are missing **Location, Location, Location**.
-* **Dummy Variables**: R automatically creates binary indicator variables when a `factor` variable (like `name`) is included in `lm()`.
-    * **Interpretation**: The coefficient shows the price premium or discount of that category compared to the **reference category** (the one R drops, usually alphabetically first).
-* **Interaction Effects (A * B)**: Used when the effect of one variable ($\beta_1$) **depends on** the level of another variable.
-    * **Example**: The value of an extra square foot ($\beta_{LivingArea}$) is much higher in "Wealthy" neighborhoods ($\beta_{LivingArea \times Wealthy}$).
-    * **Result**: Allows for non-parallel lines on a plot and can significantly increase $R^2$ (e.g., +16% in the Boston model).
-* **Polynomial Terms ($X^2$)**: Used to model non-linear relationships, like **diminishing returns** or **U-shaped/inverted-U patterns** (e.g., house Age).
-    * **R Code**: Use `I(Age^2)` in the formula to compute the squared term literally.
-    * **Warning**: You **cannot interpret the coefficient directly**; you must calculate the marginal effect.
+-   **Baseline Problem**: A simple structural model (e.g., price \~ size) typically has very low $R^2$ (e.g., 0.13), indicating most variation is unexplained. We are missing **Location, Location, Location**.
+-   **Dummy Variables**: R automatically creates binary indicator variables when a `factor` variable (like `name`) is included in `lm()`.
+    -   **Interpretation**: The coefficient shows the price premium or discount of that category compared to the **reference category** (the one R drops, usually alphabetically first).
+-   **Interaction Effects (A \* B)**: Used when the effect of one variable ($\beta_1$) **depends on** the level of another variable.
+    -   **Example**: The value of an extra square foot ($\beta_{LivingArea}$) is much higher in "Wealthy" neighborhoods ($\beta_{LivingArea \times Wealthy}$).
+    -   **Result**: Allows for non-parallel lines on a plot and can significantly increase $R^2$ (e.g., +16% in the Boston model).
+-   **Polynomial Terms (**$X^2$): Used to model non-linear relationships, like **diminishing returns** or **U-shaped/inverted-U patterns** (e.g., house Age).
+    -   **R Code**: Use `I(Age^2)` in the formula to compute the squared term literally.
+    -   **Warning**: You **cannot interpret the coefficient directly**; you must calculate the marginal effect.
 
 ### 🗺️ Why Space Matters (Hedonic Models)
 
-* **Tobler's First Law**: "Near things are more related than distant things". This means proximity to amenities/disamenities defines market value.
-* **Spatial Features**: Methods to quantify "nearbyness" for regression models:
+-   **Tobler's First Law**: "Near things are more related than distant things". This means proximity to amenities/disamenities defines market value.
+-   **Spatial Features**: Methods to quantify "nearbyness" for regression models:
     1.  **Buffer Aggregation**: Count or sum events (e.g., crimes) within a fixed radius (e.g., `crimes_500ft`).
     2.  **k-Nearest Neighbors (kNN)**: Average distance to the $k$ closest features (e.g., `crime_nn3`).
     3.  **Distance to Points**: Straight-line distance to a fixed point (e.g., `dist_downtown_mi`).
 
-###  Fixed Effects (FE) and Validation
+### Fixed Effects (FE) and Validation
 
-* **Fixed Effects**: Categorical variables (like `name`) that capture **all unmeasured characteristics** unique to that group (e.g., school quality, prestige, job access).
-    * **Impact**: FE models typically show a **dramatic improvement** in prediction accuracy ($R^2$ jump) because they "absorb" neighborhood confounders.
-    * **Trade-off**: The neighborhood effect is a **black box**—we don't know *why* the premium exists.
-* **CV Challenge**: When using **Fixed Effects** with **sparse categories** (e.g., neighborhoods with $<10$ sales), random k-fold cross-validation will often **fail** ("Factor has new levels").
-* **Solution**: **Group Sparse Categories** into a single "Small\_Neighborhoods" category before running `train()` for CV.
+-   **Fixed Effects**: Categorical variables (like `name`) that capture **all unmeasured characteristics** unique to that group (e.g., school quality, prestige, job access).
+    -   **Impact**: FE models typically show a **dramatic improvement** in prediction accuracy ($R^2$ jump) because they "absorb" neighborhood confounders.
+    -   **Trade-off**: The neighborhood effect is a **black box**—we don't know *why* the premium exists.
+-   **CV Challenge**: When using **Fixed Effects** with **sparse categories** (e.g., neighborhoods with $<10$ sales), random k-fold cross-validation will often **fail** ("Factor has new levels").
+-   **Solution**: **Group Sparse Categories** into a single "Small_Neighborhoods" category before running `train()` for CV.
 
-##  Coding Techniques (Key Code Blocks)
+## Coding Techniques (Key Code Blocks)
 
 ### 1. Spatial Conversion & Join
 
-```r
-#| label: spatial-conversion-join
-library(sf)
+\`\`\`r #\| label: spatial-conversion-join library(sf)
 
 # 1. Convert to spatial points (using MA State Plane for distance)
-boston.sf <- boston %>%
-  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>%
-  st_transform('ESRI:102286') # MA State Plane (feet)
+
+boston.sf \<- boston %\>% st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %\>% st_transform('ESRI:102286') \# MA State Plane (feet)
 
 # 2. Spatial Join to assign neighborhood name to each house point
-nhoods <- read_sf(here("data/BPDA_Neighborhood_Boundaries.geojson")) %>% 
-  st_transform('ESRI:102286') 
 
-boston.sf <- st_join(boston.sf, nhoods, join = st_intersects)
+nhoods \<- read_sf(here("data/BPDA_Neighborhood_Boundaries.geojson")) %\>% st_transform('ESRI:102286')
+
+boston.sf \<- st_join(boston.sf, nhoods, join = st_intersects)
