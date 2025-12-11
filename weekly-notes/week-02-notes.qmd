@@ -1,0 +1,59 @@
+---
+title: "MUSA 5080 | Week 2 Notes (R/Policy Focus)"
+date: "2025-09-15"
+author: "Yanyang Chen"
+format: html 
+editor: visual
+---
+
+##  Key Concepts Learned (What I Nailed This Week)
+
+###  Algorithmic Decision Making
+
+* **Definition**: Algorithms are rules for solving problems, but in policy, they are programs using data to make **predictions**.
+* **The Flaw**: Algorithmic objectivity is an illusion. Every analytical step involves **human choices** (data cleaning, variable selection), which **embed human values and biases** into the data.
+* **Case Studies**:
+    * **Healthcare Bias**: Algorithm used **cost as a proxy for need**, resulting in lower-cost, high-need Black patients being under-prioritized due to systemic inequities in access.
+    * **Criminal Justice**: **COMPAS** was trained on historical arrest data, which reflected **biased policing patterns**, leading to disproportionate risk flags for Black defendants.
+
+### ️ Census Data Foundations
+
+* **Decennial Census (2020)**: **Everyone** counted every 10 years; used for political representation.
+* **American Community Survey (ACS)**: Annual survey of **3% of households** providing **detailed data** (income, education, etc.).
+    * **5-Year Estimates**: **Most reliable** for small-area policy analysis (e.g., Census Tracts).
+* **Geography**: Most policy work is done at the **County** and **Census Tract** (1,500-8,000 people) levels. 
+* **Margins of Error (MOE)**: Every ACS estimate has uncertainty. Low MOE percentage relative to the estimate means **more reliable** data.
+* **Differential Privacy**: Adding mathematical "noise" to protect individual privacy, creating a trade-off between **privacy and accuracy**.
+
+##  Coding Techniques (New R Skills)
+
+###  Accessing Data with `tidycensus`
+
+We are shifting to the modern, programmatic approach for reproducible data fetching.
+
+```r
+#| label: setup-tidycensus
+# Load essential packages
+library(tidycensus)
+library(tidyverse)
+library(knitr)
+
+# Must set the key for programmatic access
+census_api_key("YOUR_KEY_HERE")
+
+Questions & Challenges (Self-Reflection)
+ Algorithmic Ethics & Proxies
+The challenge is consciously avoiding bad proxies (like using cost for need). I need to think critically about data gaps and historical biases in my inputs.
+
+ Data Reliability Rule
+I need more practice on the MOE Rule of Thumb to confidently discard data with overlapping error margins or very high MOE percentages.
+
+ Policy Connection
+Why MOE Matters: Unreliable data (high MOE) directly threatens algorithmic fairness and professional credibility. Knowing my data quality is the foundation of ethical policy analysis.
+
+Next Steps
+Must practice the get_acs() function with different variables and geographies.
+
+Consciously check and report MOE in all analyses to avoid making policy recommendations based on unreliable estimates.
+
+Always ask: "Who might be excluded from my analysis?"

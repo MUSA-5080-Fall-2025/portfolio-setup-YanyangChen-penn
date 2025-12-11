@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Your Name Here">
+<meta name="dcterms.date" content="2025-09-29">
 
-<title>Weekly Notes – Yanyang Chen - MUSA 5080 Portfolio</title>
+<title>MUSA 5080 | Week 4 Notes (Spatial Data &amp; GIS in R) – Yanyang Chen - MUSA 5080 Portfolio</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,15 +107,15 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Week 1 Notes</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../weekly-notes/week-02-notes.qmd">
+    <a class="dropdown-item" href="../weekly-notes/week-02-notes.html">
  <span class="dropdown-text">Week 2 Notes</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../weekly-notes/week-03-notes.qmd">
+    <a class="dropdown-item" href="../weekly-notes/week-03-notes.html">
  <span class="dropdown-text">Week 3 Notes</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../weekly-notes/week-04-notes.qmd">
+    <a class="dropdown-item" href="../weekly-notes/week-04-notes.html">
  <span class="dropdown-text">Week 4 Notes</span></a>
   </li>  
         <li>
@@ -192,9 +194,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#weekly-learning-notes" id="toc-weekly-learning-notes" class="nav-link active" data-scroll-target="#weekly-learning-notes">Weekly Learning Notes</a>
+  <li><a href="#key-concepts-learned-core-takeaways" id="toc-key-concepts-learned-core-takeaways" class="nav-link active" data-scroll-target="#key-concepts-learned-core-takeaways">🚀 Key Concepts Learned (Core Takeaways)</a>
   <ul class="collapse">
-  <li><a href="#available-notes" id="toc-available-notes" class="nav-link" data-scroll-target="#available-notes">Available Notes</a></li>
+  <li><a href="#why-spatial-analysis-matters" id="toc-why-spatial-analysis-matters" class="nav-link" data-scroll-target="#why-spatial-analysis-matters">🗺️ Why Spatial Analysis Matters</a></li>
+  <li><a href="#spatial-data-fundamentals-sf-package" id="toc-spatial-data-fundamentals-sf-package" class="nav-link" data-scroll-target="#spatial-data-fundamentals-sf-package">📐 Spatial Data Fundamentals (<code>sf</code> package)</a></li>
+  </ul></li>
+  <li><a href="#coding-techniques-r-skills-spatial-operations" id="toc-coding-techniques-r-skills-spatial-operations" class="nav-link" data-scroll-target="#coding-techniques-r-skills-spatial-operations">💻 Coding Techniques (R Skills: Spatial Operations)</a>
+  <ul class="collapse">
+  <li><a href="#spatial-subsetting-st_filter" id="toc-spatial-subsetting-st_filter" class="nav-link" data-scroll-target="#spatial-subsetting-st_filter">🔗 Spatial Subsetting (<code>st_filter()</code>)</a></li>
+  <li><a href="#spatial-joins-st_join" id="toc-spatial-joins-st_join" class="nav-link" data-scroll-target="#spatial-joins-st_join">🤝 Spatial Joins (<code>st_join()</code>)</a></li>
+  <li><a href="#distance-and-area-calculations" id="toc-distance-and-area-calculations" class="nav-link" data-scroll-target="#distance-and-area-calculations">📏 Distance and Area Calculations</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -204,14 +213,26 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Weekly Notes</h1>
+<h1 class="title">MUSA 5080 | Week 4 Notes (Spatial Data &amp; GIS in R)</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Your Name Here </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 29, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -221,22 +242,57 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="weekly-learning-notes" class="level1">
-<h1>Weekly Learning Notes</h1>
-<p>Welcome to my weekly notes for MUSA 5080 - Public Policy Analytics. Here you’ll find my reflections, key concepts, and learning outcomes from each week.</p>
-<section id="available-notes" class="level2">
-<h2 class="anchored" data-anchor-id="available-notes">Available Notes</h2>
+<section id="key-concepts-learned-core-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-concepts-learned-core-takeaways">🚀 Key Concepts Learned (Core Takeaways)</h2>
+<section id="why-spatial-analysis-matters" class="level3">
+<h3 class="anchored" data-anchor-id="why-spatial-analysis-matters">🗺️ Why Spatial Analysis Matters</h3>
 <ul>
-<li><a href="../weekly-notes/week-01-notes.html">Week 1 Notes</a></li>
-<li><a href="week-02-notes.qmd">Week 2 Notes</a></li>
-<li><a href="week-03-notes.qmd">Week 3 Notes</a></li>
-<li><a href="week-04-notes.qmd">Week 4 Notes</a></li>
-<li><a href="week-05-notes.qmd">Week 5 Notes</a></li>
-<li><a href="week-06-notes.qmd">Week 6 Notes</a></li>
-<li><a href="week-07-notes.qmd">Week 7 Notes</a></li>
-<li><a href="week-08-notes.qmd">Week 8 Notes</a></li>
+<li><strong>Missing Piece</strong>: We previously worked with <em>what</em> is happening (income, education) but not <strong>WHERE</strong> it is happening. Spatial analysis answers critical questions like: Are low-income communities clustered? Are they near resources?.</li>
+<li><strong>Algorithmic Fairness</strong>: Geographic bias exists in algorithms (e.g., rideshare avoiding areas, crime prediction concentrating enforcement). Understanding spatial patterns is necessary to design <strong>fairer systems</strong>.</li>
 </ul>
-<p>More notes will be added as the course progresses.</p>
+</section>
+<section id="spatial-data-fundamentals-sf-package" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-data-fundamentals-sf-package">📐 Spatial Data Fundamentals (<code>sf</code> package)</h3>
+<ul>
+<li><strong>Vector Data Model</strong>: The real world is represented by simplified geometric types:
+<ul>
+<li><strong>Points</strong>: Locations (hospitals, incidents) .</li>
+<li><strong>Lines</strong>: Linear features (roads, transit routes).</li>
+<li><strong>Polygons</strong>: Areas (census tracts, neighborhoods).</li>
+</ul></li>
+<li><strong>The <code>sf</code> Package</strong>: The modern standard in R. Spatial data is viewed simply as a standard <code>data.frame</code> with an extra <strong>geometry column</strong>.</li>
+</ul>
+</section>
+</section>
+<section id="coding-techniques-r-skills-spatial-operations" class="level2">
+<h2 class="anchored" data-anchor-id="coding-techniques-r-skills-spatial-operations">💻 Coding Techniques (R Skills: Spatial Operations)</h2>
+<section id="spatial-subsetting-st_filter" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-subsetting-st_filter">🔗 Spatial Subsetting (<code>st_filter()</code>)</h3>
+<p>This function extracts features based on a spatial relationship, using the <code>.predicate</code> parameter.</p>
+<ul>
+<li><strong>Key Function</strong>: <code>st_filter(data_to_filter, reference_geometry, .predicate = relationship)</code>.</li>
+<li><strong>Predicates</strong>:
+<ul>
+<li><code>st_intersects</code>: Any overlap (default). Used for: “Which counties are affected by flooding?”.</li>
+<li><code>st_touches</code>: Share a boundary, no interior overlap. Used for: “Which counties border Allegheny?”.</li>
+<li><code>st_within</code>: Completely inside. Used for: “Schools within district boundaries”.</li>
+<li><strong>Note</strong>: Using <code>st_intersects</code> includes the reference feature itself.</li>
+</ul></li>
+</ul>
+</section>
+<section id="spatial-joins-st_join" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-joins-st_join">🤝 Spatial Joins (<code>st_join()</code>)</h3>
+<p>Combines two datasets based on a spatial relationship instead of a shared ID.</p>
+<ul>
+<li><strong>Use Case</strong>: Joining a table of demographic data (non-spatial) to a polygon layer (spatial) based on the <code>GEOID</code>.</li>
+</ul>
+</section>
+<section id="distance-and-area-calculations" class="level3">
+<h3 class="anchored" data-anchor-id="distance-and-area-calculations">📏 Distance and Area Calculations</h3>
+<ul>
+<li><strong>Area</strong>: <code>st_area(geometry)</code>. <strong>Units depend on the CRS!</strong>.</li>
+<li><strong>Distance</strong>: <code>st_distance(geometry1, geometry2)</code>.</li>
+</ul>
 
 
 </section>

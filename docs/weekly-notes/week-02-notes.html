@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Yanyang Chen">
+<meta name="dcterms.date" content="2025-09-15">
 
-<title>Weekly Notes – Yanyang Chen - MUSA 5080 Portfolio</title>
+<title>MUSA 5080 | Week 2 Notes (R/Policy Focus) – Yanyang Chen - MUSA 5080 Portfolio</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,7 +107,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Week 1 Notes</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../weekly-notes/week-02-notes.qmd">
+    <a class="dropdown-item" href="../weekly-notes/week-02-notes.html">
  <span class="dropdown-text">Week 2 Notes</span></a>
   </li>  
         <li>
@@ -192,10 +194,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#weekly-learning-notes" id="toc-weekly-learning-notes" class="nav-link active" data-scroll-target="#weekly-learning-notes">Weekly Learning Notes</a>
+  <li><a href="#key-concepts-learned-what-i-nailed-this-week" id="toc-key-concepts-learned-what-i-nailed-this-week" class="nav-link active" data-scroll-target="#key-concepts-learned-what-i-nailed-this-week">Key Concepts Learned (What I Nailed This Week)</a>
   <ul class="collapse">
-  <li><a href="#available-notes" id="toc-available-notes" class="nav-link" data-scroll-target="#available-notes">Available Notes</a></li>
+  <li><a href="#algorithmic-decision-making" id="toc-algorithmic-decision-making" class="nav-link" data-scroll-target="#algorithmic-decision-making">Algorithmic Decision Making</a></li>
+  <li><a href="#census-data-foundations" id="toc-census-data-foundations" class="nav-link" data-scroll-target="#census-data-foundations">️ Census Data Foundations</a></li>
   </ul></li>
+  <li><a href="#coding-techniques-new-r-skills" id="toc-coding-techniques-new-r-skills" class="nav-link" data-scroll-target="#coding-techniques-new-r-skills">Coding Techniques (New R Skills)</a>
+  <ul class="collapse">
+  <li><a href="#accessing-data-with-tidycensus" id="toc-accessing-data-with-tidycensus" class="nav-link" data-scroll-target="#accessing-data-with-tidycensus">Accessing Data with <code>tidycensus</code></a></li>
+  </ul></li>
+  <li><a href="#must-set-the-key-for-programmatic-access" id="toc-must-set-the-key-for-programmatic-access" class="nav-link" data-scroll-target="#must-set-the-key-for-programmatic-access">Must set the key for programmatic access</a></li>
   </ul>
 </nav>
     </div>
@@ -204,14 +212,26 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Weekly Notes</h1>
+<h1 class="title">MUSA 5080 | Week 2 Notes (R/Policy Focus)</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yanyang Chen </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 15, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -221,25 +241,53 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="weekly-learning-notes" class="level1">
-<h1>Weekly Learning Notes</h1>
-<p>Welcome to my weekly notes for MUSA 5080 - Public Policy Analytics. Here you’ll find my reflections, key concepts, and learning outcomes from each week.</p>
-<section id="available-notes" class="level2">
-<h2 class="anchored" data-anchor-id="available-notes">Available Notes</h2>
+<section id="key-concepts-learned-what-i-nailed-this-week" class="level2">
+<h2 class="anchored" data-anchor-id="key-concepts-learned-what-i-nailed-this-week">Key Concepts Learned (What I Nailed This Week)</h2>
+<section id="algorithmic-decision-making" class="level3">
+<h3 class="anchored" data-anchor-id="algorithmic-decision-making">Algorithmic Decision Making</h3>
 <ul>
-<li><a href="../weekly-notes/week-01-notes.html">Week 1 Notes</a></li>
-<li><a href="week-02-notes.qmd">Week 2 Notes</a></li>
-<li><a href="week-03-notes.qmd">Week 3 Notes</a></li>
-<li><a href="week-04-notes.qmd">Week 4 Notes</a></li>
-<li><a href="week-05-notes.qmd">Week 5 Notes</a></li>
-<li><a href="week-06-notes.qmd">Week 6 Notes</a></li>
-<li><a href="week-07-notes.qmd">Week 7 Notes</a></li>
-<li><a href="week-08-notes.qmd">Week 8 Notes</a></li>
+<li><strong>Definition</strong>: Algorithms are rules for solving problems, but in policy, they are programs using data to make <strong>predictions</strong>.</li>
+<li><strong>The Flaw</strong>: Algorithmic objectivity is an illusion. Every analytical step involves <strong>human choices</strong> (data cleaning, variable selection), which <strong>embed human values and biases</strong> into the data.</li>
+<li><strong>Case Studies</strong>:
+<ul>
+<li><strong>Healthcare Bias</strong>: Algorithm used <strong>cost as a proxy for need</strong>, resulting in lower-cost, high-need Black patients being under-prioritized due to systemic inequities in access.</li>
+<li><strong>Criminal Justice</strong>: <strong>COMPAS</strong> was trained on historical arrest data, which reflected <strong>biased policing patterns</strong>, leading to disproportionate risk flags for Black defendants.</li>
+</ul></li>
 </ul>
-<p>More notes will be added as the course progresses.</p>
-
-
 </section>
+<section id="census-data-foundations" class="level3">
+<h3 class="anchored" data-anchor-id="census-data-foundations">️ Census Data Foundations</h3>
+<ul>
+<li><strong>Decennial Census (2020)</strong>: <strong>Everyone</strong> counted every 10 years; used for political representation.</li>
+<li><strong>American Community Survey (ACS)</strong>: Annual survey of <strong>3% of households</strong> providing <strong>detailed data</strong> (income, education, etc.).
+<ul>
+<li><strong>5-Year Estimates</strong>: <strong>Most reliable</strong> for small-area policy analysis (e.g., Census Tracts).</li>
+</ul></li>
+<li><strong>Geography</strong>: Most policy work is done at the <strong>County</strong> and <strong>Census Tract</strong> (1,500-8,000 people) levels.</li>
+<li><strong>Margins of Error (MOE)</strong>: Every ACS estimate has uncertainty. Low MOE percentage relative to the estimate means <strong>more reliable</strong> data.</li>
+<li><strong>Differential Privacy</strong>: Adding mathematical “noise” to protect individual privacy, creating a trade-off between <strong>privacy and accuracy</strong>.</li>
+</ul>
+</section>
+</section>
+<section id="coding-techniques-new-r-skills" class="level2">
+<h2 class="anchored" data-anchor-id="coding-techniques-new-r-skills">Coding Techniques (New R Skills)</h2>
+<section id="accessing-data-with-tidycensus" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-data-with-tidycensus">Accessing Data with <code>tidycensus</code></h3>
+<p>We are shifting to the modern, programmatic approach for reproducible data fetching.</p>
+<p>```r #| label: setup-tidycensus # Load essential packages library(tidycensus) library(tidyverse) library(knitr)</p>
+</section>
+</section>
+<section id="must-set-the-key-for-programmatic-access" class="level1">
+<h1>Must set the key for programmatic access</h1>
+<p>census_api_key(“YOUR_KEY_HERE”)</p>
+<p>Questions &amp; Challenges (Self-Reflection) Algorithmic Ethics &amp; Proxies The challenge is consciously avoiding bad proxies (like using cost for need). I need to think critically about data gaps and historical biases in my inputs.</p>
+<p>Data Reliability Rule I need more practice on the MOE Rule of Thumb to confidently discard data with overlapping error margins or very high MOE percentages.</p>
+<p>Policy Connection Why MOE Matters: Unreliable data (high MOE) directly threatens algorithmic fairness and professional credibility. Knowing my data quality is the foundation of ethical policy analysis.</p>
+<p>Next Steps Must practice the get_acs() function with different variables and geographies.</p>
+<p>Consciously check and report MOE in all analyses to avoid making policy recommendations based on unreliable estimates.</p>
+<p>Always ask: “Who might be excluded from my analysis?”</p>
+
+
 </section>
 
 </main> <!-- /main -->

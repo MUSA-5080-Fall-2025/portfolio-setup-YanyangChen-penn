@@ -1,0 +1,73 @@
+---
+title: "MUSA 5080 | Week 3 Notes (Visualization & Ethics)"
+date: "2025-09-22"
+author: "Yanyang Chen"
+format: html 
+editor: visual
+---
+
+##  Key Concepts Learned (Core Takeaways)
+
+###  Why Visualization Matters (Anscombe’s Quartet)
+
+* **The Big Lesson**: **Summary statistics can hide critical patterns!** Four datasets can have identical means, variances, correlation, and regression lines, but be completely different visually (Anscombe's Quartet). * **Policy Implications**:
+    * Outliers often represent **important communities** that algorithms and simple averages might miss.
+    * Visual inspection immediately reveals **data quality issues**.
+
+###  Ethical Data Communication
+
+* **The Responsibility**: We must create **honest, transparent visualizations** and **always communicate data quality**.
+* **The Failure**: Research shows most planners **fail to report margins of error (MOEs)** and warn users about unreliable data, which violates the AICP Code of Ethics.
+* **Real Consequence**: Poor policy decisions are made when data uncertainty is hidden or ignored (e.g., unreliable child poverty estimates used for planning).
+
+## Coding Techniques (R Skills: `ggplot2` & Joins)
+
+### The Grammar of Graphics (`ggplot2`)
+
+Plotting is done by adding layers with `+`. The philosophy is: **Data** $\rightarrow$ **Aesthetics** $\rightarrow$ **Geometries**.
+
+* **Basic Structure**: `ggplot(data = DATA) + aes(x = X, y = Y) + geom_something()`
+* **Aesthetics (`aes()`)**: Maps **data variables** to visual properties (e.g., `x`, `y`, `color`, `fill`, `size`).
+* **Geometries (`geom_...()`)**: Defines how data is displayed (e.g., `geom_point()` for scatter, `geom_bar()` for bar charts).
+
+###  Exploratory Data Analysis (EDA)
+
+EDA is detective work aimed at understanding data **before** building models. 
+1.  **Visualize Distributions**: Use histograms and boxplots to check for skewness, outliers, or multiple peaks.
+2.  **Assess Reliability**: **CRITICAL STEP**. Calculate the Coefficient of Variation (CV) to assess data trustworthiness.
+
+```r
+#| label: reliability-cv
+# Coefficient of Variation (CV) = MOE / Estimate / 1.645
+# CV < 12% is reliable (green)
+# CV > 40% is unreliable (red)
+
+
+ Data Joins (dplyr)
+Used to combine separate datasets (e.g., joining income data with education data on a common ID).
+
+Most Common: left_join()
+
+Keeps all rows from the left (first) dataset and adds matching columns from the right dataset.
+
+Crucial Step: Always verify joins by checking the number of rows before and after the join to ensure no data loss or duplication.
+
+ Questions & Challenges (Self-Reflection)
+ Ethical Visualization Practice
+I must incorporate the 5 Essential Guidelines for Using ACS Data into all my labs:
+
+Report the MOEs.
+
+Include a footnote if MOEs are omitted.
+
+Provide context using CV categories (e.g., "This estimate is unreliable because CV > 40%").
+
+Reduce uncertainty (aggregate data/geographies).
+
+Conduct significance tests for comparisons.
+
+ ggplot2 Nuances
+Need more practice separating Aesthetics (inside aes(), uses column names) from Constants (outside aes(), like color = "blue") when building plots.
+
+ Policy Connection
+My job is to visually assess data quality (e.g., plotting MOE % vs. Population size to find vulnerable, undercounted communities) and communicate uncertainty clearly, which is an ethical requirement under the AICP Code of Ethics.

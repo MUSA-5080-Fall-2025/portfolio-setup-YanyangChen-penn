@@ -88,14 +88,14 @@
     "href": "weekly-notes/index.html",
     "title": "Weekly Notes",
     "section": "",
-    "text": "Welcome to my weekly notes for MUSA 5080 - Public Policy Analytics. Here you’ll find my reflections, key concepts, and learning outcomes from each week.\n\n\n\nWeek 1 Notes\nWeek 2 Notes\n\nMore notes will be added as the course progresses."
+    "text": "Welcome to my weekly notes for MUSA 5080 - Public Policy Analytics. Here you’ll find my reflections, key concepts, and learning outcomes from each week.\n\n\n\nWeek 1 Notes\nWeek 2 Notes\nWeek 3 Notes\nWeek 4 Notes\nWeek 5 Notes\nWeek 6 Notes\nWeek 7 Notes\nWeek 8 Notes\n\nMore notes will be added as the course progresses."
   },
   {
     "objectID": "weekly-notes/index.html#available-notes",
     "href": "weekly-notes/index.html#available-notes",
     "title": "Weekly Notes",
     "section": "",
-    "text": "Week 1 Notes\nWeek 2 Notes\n\nMore notes will be added as the course progresses."
+    "text": "Week 1 Notes\nWeek 2 Notes\nWeek 3 Notes\nWeek 4 Notes\nWeek 5 Notes\nWeek 6 Notes\nWeek 7 Notes\nWeek 8 Notes\n\nMore notes will be added as the course progresses."
   },
   {
     "objectID": "assignments/assignment_4/assignment4.html",
@@ -684,5 +684,68 @@
     "title": "MUSA 5080 | Week 1 Survival Notes (R Edition)",
     "section": "Coding Techniques (My New Superpowers)",
     "text": "Coding Techniques (My New Superpowers)\n\nThe Pipe %&gt;% (or |&gt;)\nThe pipe is the magic of dplyr. It reads as “and then…” and takes the output from the left side, feeding it as the first argument to the function on the right.\n``r # The clean, readable pipeline flow: car_summary &lt;- data %&gt;%   filter(Year of manufacture` &gt;= 2020) %&gt;% # Then, filter select(Manufacturer, Model, Price) %&gt;% # Then, select group_by(Manufacturer) %&gt;% # Then, group summarize(avg_price = mean(Price)) # Then, summarize"
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html",
+    "href": "weekly-notes/week-02-notes.html",
+    "title": "MUSA 5080 | Week 2 Notes (R/Policy Focus)",
+    "section": "",
+    "text": "Definition: Algorithms are rules for solving problems, but in policy, they are programs using data to make predictions.\nThe Flaw: Algorithmic objectivity is an illusion. Every analytical step involves human choices (data cleaning, variable selection), which embed human values and biases into the data.\nCase Studies:\n\nHealthcare Bias: Algorithm used cost as a proxy for need, resulting in lower-cost, high-need Black patients being under-prioritized due to systemic inequities in access.\nCriminal Justice: COMPAS was trained on historical arrest data, which reflected biased policing patterns, leading to disproportionate risk flags for Black defendants.\n\n\n\n\n\n\nDecennial Census (2020): Everyone counted every 10 years; used for political representation.\nAmerican Community Survey (ACS): Annual survey of 3% of households providing detailed data (income, education, etc.).\n\n5-Year Estimates: Most reliable for small-area policy analysis (e.g., Census Tracts).\n\nGeography: Most policy work is done at the County and Census Tract (1,500-8,000 people) levels.\nMargins of Error (MOE): Every ACS estimate has uncertainty. Low MOE percentage relative to the estimate means more reliable data.\nDifferential Privacy: Adding mathematical “noise” to protect individual privacy, creating a trade-off between privacy and accuracy."
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html#key-concepts-learned-what-i-nailed-this-week",
+    "href": "weekly-notes/week-02-notes.html#key-concepts-learned-what-i-nailed-this-week",
+    "title": "MUSA 5080 | Week 2 Notes (R/Policy Focus)",
+    "section": "",
+    "text": "Definition: Algorithms are rules for solving problems, but in policy, they are programs using data to make predictions.\nThe Flaw: Algorithmic objectivity is an illusion. Every analytical step involves human choices (data cleaning, variable selection), which embed human values and biases into the data.\nCase Studies:\n\nHealthcare Bias: Algorithm used cost as a proxy for need, resulting in lower-cost, high-need Black patients being under-prioritized due to systemic inequities in access.\nCriminal Justice: COMPAS was trained on historical arrest data, which reflected biased policing patterns, leading to disproportionate risk flags for Black defendants.\n\n\n\n\n\n\nDecennial Census (2020): Everyone counted every 10 years; used for political representation.\nAmerican Community Survey (ACS): Annual survey of 3% of households providing detailed data (income, education, etc.).\n\n5-Year Estimates: Most reliable for small-area policy analysis (e.g., Census Tracts).\n\nGeography: Most policy work is done at the County and Census Tract (1,500-8,000 people) levels.\nMargins of Error (MOE): Every ACS estimate has uncertainty. Low MOE percentage relative to the estimate means more reliable data.\nDifferential Privacy: Adding mathematical “noise” to protect individual privacy, creating a trade-off between privacy and accuracy."
+  },
+  {
+    "objectID": "weekly-notes/week-02-notes.html#coding-techniques-new-r-skills",
+    "href": "weekly-notes/week-02-notes.html#coding-techniques-new-r-skills",
+    "title": "MUSA 5080 | Week 2 Notes (R/Policy Focus)",
+    "section": "Coding Techniques (New R Skills)",
+    "text": "Coding Techniques (New R Skills)\n\nAccessing Data with tidycensus\nWe are shifting to the modern, programmatic approach for reproducible data fetching.\n```r #| label: setup-tidycensus # Load essential packages library(tidycensus) library(tidyverse) library(knitr)"
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html",
+    "href": "weekly-notes/week-03-notes.html",
+    "title": "MUSA 5080 | Week 3 Notes (Visualization & Ethics)",
+    "section": "",
+    "text": "The Big Lesson: Summary statistics can hide critical patterns! Four datasets can have identical means, variances, correlation, and regression lines, but be completely different visually (Anscombe’s Quartet). * Policy Implications:\n\nOutliers often represent important communities that algorithms and simple averages might miss.\nVisual inspection immediately reveals data quality issues.\n\n\n\n\n\n\nThe Responsibility: We must create honest, transparent visualizations and always communicate data quality.\nThe Failure: Research shows most planners fail to report margins of error (MOEs) and warn users about unreliable data, which violates the AICP Code of Ethics.\nReal Consequence: Poor policy decisions are made when data uncertainty is hidden or ignored (e.g., unreliable child poverty estimates used for planning)."
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html#key-concepts-learned-core-takeaways",
+    "href": "weekly-notes/week-03-notes.html#key-concepts-learned-core-takeaways",
+    "title": "MUSA 5080 | Week 3 Notes (Visualization & Ethics)",
+    "section": "",
+    "text": "The Big Lesson: Summary statistics can hide critical patterns! Four datasets can have identical means, variances, correlation, and regression lines, but be completely different visually (Anscombe’s Quartet). * Policy Implications:\n\nOutliers often represent important communities that algorithms and simple averages might miss.\nVisual inspection immediately reveals data quality issues.\n\n\n\n\n\n\nThe Responsibility: We must create honest, transparent visualizations and always communicate data quality.\nThe Failure: Research shows most planners fail to report margins of error (MOEs) and warn users about unreliable data, which violates the AICP Code of Ethics.\nReal Consequence: Poor policy decisions are made when data uncertainty is hidden or ignored (e.g., unreliable child poverty estimates used for planning)."
+  },
+  {
+    "objectID": "weekly-notes/week-03-notes.html#coding-techniques-r-skills-ggplot2-joins",
+    "href": "weekly-notes/week-03-notes.html#coding-techniques-r-skills-ggplot2-joins",
+    "title": "MUSA 5080 | Week 3 Notes (Visualization & Ethics)",
+    "section": "Coding Techniques (R Skills: ggplot2 & Joins)",
+    "text": "Coding Techniques (R Skills: ggplot2 & Joins)\n\nThe Grammar of Graphics (ggplot2)\nPlotting is done by adding layers with +. The philosophy is: Data \\(\\rightarrow\\) Aesthetics \\(\\rightarrow\\) Geometries.\n\nBasic Structure: ggplot(data = DATA) + aes(x = X, y = Y) + geom_something()\nAesthetics (aes()): Maps data variables to visual properties (e.g., x, y, color, fill, size).\nGeometries (geom_...()): Defines how data is displayed (e.g., geom_point() for scatter, geom_bar() for bar charts).\n\n\n\nExploratory Data Analysis (EDA)\nEDA is detective work aimed at understanding data before building models. 1. Visualize Distributions: Use histograms and boxplots to check for skewness, outliers, or multiple peaks. 2. Assess Reliability: CRITICAL STEP. Calculate the Coefficient of Variation (CV) to assess data trustworthiness.\n```r #| label: reliability-cv # Coefficient of Variation (CV) = MOE / Estimate / 1.645 # CV &lt; 12% is reliable (green) # CV &gt; 40% is unreliable (red)\nData Joins (dplyr) Used to combine separate datasets (e.g., joining income data with education data on a common ID).\nMost Common: left_join()\nKeeps all rows from the left (first) dataset and adds matching columns from the right dataset.\nCrucial Step: Always verify joins by checking the number of rows before and after the join to ensure no data loss or duplication.\nQuestions & Challenges (Self-Reflection) Ethical Visualization Practice I must incorporate the 5 Essential Guidelines for Using ACS Data into all my labs:\nReport the MOEs.\nInclude a footnote if MOEs are omitted.\nProvide context using CV categories (e.g., “This estimate is unreliable because CV &gt; 40%”).\nReduce uncertainty (aggregate data/geographies).\nConduct significance tests for comparisons.\nggplot2 Nuances Need more practice separating Aesthetics (inside aes(), uses column names) from Constants (outside aes(), like color = “blue”) when building plots.\nPolicy Connection My job is to visually assess data quality (e.g., plotting MOE % vs. Population size to find vulnerable, undercounted communities) and communicate uncertainty clearly, which is an ethical requirement under the AICP Code of Ethics."
+  },
+  {
+    "objectID": "weekly-notes/week-04-notes.html",
+    "href": "weekly-notes/week-04-notes.html",
+    "title": "MUSA 5080 | Week 4 Notes (Spatial Data & GIS in R)",
+    "section": "",
+    "text": "Missing Piece: We previously worked with what is happening (income, education) but not WHERE it is happening. Spatial analysis answers critical questions like: Are low-income communities clustered? Are they near resources?.\nAlgorithmic Fairness: Geographic bias exists in algorithms (e.g., rideshare avoiding areas, crime prediction concentrating enforcement). Understanding spatial patterns is necessary to design fairer systems.\n\n\n\n\n\nVector Data Model: The real world is represented by simplified geometric types:\n\nPoints: Locations (hospitals, incidents) .\nLines: Linear features (roads, transit routes).\nPolygons: Areas (census tracts, neighborhoods).\n\nThe sf Package: The modern standard in R. Spatial data is viewed simply as a standard data.frame with an extra geometry column."
+  },
+  {
+    "objectID": "weekly-notes/week-04-notes.html#key-concepts-learned-core-takeaways",
+    "href": "weekly-notes/week-04-notes.html#key-concepts-learned-core-takeaways",
+    "title": "MUSA 5080 | Week 4 Notes (Spatial Data & GIS in R)",
+    "section": "",
+    "text": "Missing Piece: We previously worked with what is happening (income, education) but not WHERE it is happening. Spatial analysis answers critical questions like: Are low-income communities clustered? Are they near resources?.\nAlgorithmic Fairness: Geographic bias exists in algorithms (e.g., rideshare avoiding areas, crime prediction concentrating enforcement). Understanding spatial patterns is necessary to design fairer systems.\n\n\n\n\n\nVector Data Model: The real world is represented by simplified geometric types:\n\nPoints: Locations (hospitals, incidents) .\nLines: Linear features (roads, transit routes).\nPolygons: Areas (census tracts, neighborhoods).\n\nThe sf Package: The modern standard in R. Spatial data is viewed simply as a standard data.frame with an extra geometry column."
+  },
+  {
+    "objectID": "weekly-notes/week-04-notes.html#coding-techniques-r-skills-spatial-operations",
+    "href": "weekly-notes/week-04-notes.html#coding-techniques-r-skills-spatial-operations",
+    "title": "MUSA 5080 | Week 4 Notes (Spatial Data & GIS in R)",
+    "section": "💻 Coding Techniques (R Skills: Spatial Operations)",
+    "text": "💻 Coding Techniques (R Skills: Spatial Operations)\n\n🔗 Spatial Subsetting (st_filter())\nThis function extracts features based on a spatial relationship, using the .predicate parameter.\n\nKey Function: st_filter(data_to_filter, reference_geometry, .predicate = relationship).\nPredicates:\n\nst_intersects: Any overlap (default). Used for: “Which counties are affected by flooding?”.\nst_touches: Share a boundary, no interior overlap. Used for: “Which counties border Allegheny?”.\nst_within: Completely inside. Used for: “Schools within district boundaries”.\nNote: Using st_intersects includes the reference feature itself.\n\n\n\n\n🤝 Spatial Joins (st_join())\nCombines two datasets based on a spatial relationship instead of a shared ID.\n\nUse Case: Joining a table of demographic data (non-spatial) to a polygon layer (spatial) based on the GEOID.\n\n\n\n📏 Distance and Area Calculations\n\nArea: st_area(geometry). Units depend on the CRS!.\nDistance: st_distance(geometry1, geometry2)."
   }
 ]

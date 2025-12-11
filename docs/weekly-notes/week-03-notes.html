@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Yanyang Chen">
+<meta name="dcterms.date" content="2025-09-22">
 
-<title>Weekly Notes – Yanyang Chen - MUSA 5080 Portfolio</title>
+<title>MUSA 5080 | Week 3 Notes (Visualization &amp; Ethics) – Yanyang Chen - MUSA 5080 Portfolio</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,6 +69,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -105,11 +136,11 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Week 1 Notes</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../weekly-notes/week-02-notes.qmd">
+    <a class="dropdown-item" href="../weekly-notes/week-02-notes.html">
  <span class="dropdown-text">Week 2 Notes</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../weekly-notes/week-03-notes.qmd">
+    <a class="dropdown-item" href="../weekly-notes/week-03-notes.html">
  <span class="dropdown-text">Week 3 Notes</span></a>
   </li>  
         <li>
@@ -192,9 +223,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#weekly-learning-notes" id="toc-weekly-learning-notes" class="nav-link active" data-scroll-target="#weekly-learning-notes">Weekly Learning Notes</a>
+  <li><a href="#key-concepts-learned-core-takeaways" id="toc-key-concepts-learned-core-takeaways" class="nav-link active" data-scroll-target="#key-concepts-learned-core-takeaways">Key Concepts Learned (Core Takeaways)</a>
   <ul class="collapse">
-  <li><a href="#available-notes" id="toc-available-notes" class="nav-link" data-scroll-target="#available-notes">Available Notes</a></li>
+  <li><a href="#why-visualization-matters-anscombes-quartet" id="toc-why-visualization-matters-anscombes-quartet" class="nav-link" data-scroll-target="#why-visualization-matters-anscombes-quartet">Why Visualization Matters (Anscombe’s Quartet)</a></li>
+  <li><a href="#ethical-data-communication" id="toc-ethical-data-communication" class="nav-link" data-scroll-target="#ethical-data-communication">Ethical Data Communication</a></li>
+  </ul></li>
+  <li><a href="#coding-techniques-r-skills-ggplot2-joins" id="toc-coding-techniques-r-skills-ggplot2-joins" class="nav-link" data-scroll-target="#coding-techniques-r-skills-ggplot2-joins">Coding Techniques (R Skills: <code>ggplot2</code> &amp; Joins)</a>
+  <ul class="collapse">
+  <li><a href="#the-grammar-of-graphics-ggplot2" id="toc-the-grammar-of-graphics-ggplot2" class="nav-link" data-scroll-target="#the-grammar-of-graphics-ggplot2">The Grammar of Graphics (<code>ggplot2</code>)</a></li>
+  <li><a href="#exploratory-data-analysis-eda" id="toc-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -204,14 +241,26 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Weekly Notes</h1>
+<h1 class="title">MUSA 5080 | Week 3 Notes (Visualization &amp; Ethics)</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yanyang Chen </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 22, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -221,22 +270,54 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="weekly-learning-notes" class="level1">
-<h1>Weekly Learning Notes</h1>
-<p>Welcome to my weekly notes for MUSA 5080 - Public Policy Analytics. Here you’ll find my reflections, key concepts, and learning outcomes from each week.</p>
-<section id="available-notes" class="level2">
-<h2 class="anchored" data-anchor-id="available-notes">Available Notes</h2>
+<section id="key-concepts-learned-core-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="key-concepts-learned-core-takeaways">Key Concepts Learned (Core Takeaways)</h2>
+<section id="why-visualization-matters-anscombes-quartet" class="level3">
+<h3 class="anchored" data-anchor-id="why-visualization-matters-anscombes-quartet">Why Visualization Matters (Anscombe’s Quartet)</h3>
 <ul>
-<li><a href="../weekly-notes/week-01-notes.html">Week 1 Notes</a></li>
-<li><a href="week-02-notes.qmd">Week 2 Notes</a></li>
-<li><a href="week-03-notes.qmd">Week 3 Notes</a></li>
-<li><a href="week-04-notes.qmd">Week 4 Notes</a></li>
-<li><a href="week-05-notes.qmd">Week 5 Notes</a></li>
-<li><a href="week-06-notes.qmd">Week 6 Notes</a></li>
-<li><a href="week-07-notes.qmd">Week 7 Notes</a></li>
-<li><a href="week-08-notes.qmd">Week 8 Notes</a></li>
+<li><strong>The Big Lesson</strong>: <strong>Summary statistics can hide critical patterns!</strong> Four datasets can have identical means, variances, correlation, and regression lines, but be completely different visually (Anscombe’s Quartet). * <strong>Policy Implications</strong>:
+<ul>
+<li>Outliers often represent <strong>important communities</strong> that algorithms and simple averages might miss.</li>
+<li>Visual inspection immediately reveals <strong>data quality issues</strong>.</li>
+</ul></li>
 </ul>
-<p>More notes will be added as the course progresses.</p>
+</section>
+<section id="ethical-data-communication" class="level3">
+<h3 class="anchored" data-anchor-id="ethical-data-communication">Ethical Data Communication</h3>
+<ul>
+<li><strong>The Responsibility</strong>: We must create <strong>honest, transparent visualizations</strong> and <strong>always communicate data quality</strong>.</li>
+<li><strong>The Failure</strong>: Research shows most planners <strong>fail to report margins of error (MOEs)</strong> and warn users about unreliable data, which violates the AICP Code of Ethics.</li>
+<li><strong>Real Consequence</strong>: Poor policy decisions are made when data uncertainty is hidden or ignored (e.g., unreliable child poverty estimates used for planning).</li>
+</ul>
+</section>
+</section>
+<section id="coding-techniques-r-skills-ggplot2-joins" class="level2">
+<h2 class="anchored" data-anchor-id="coding-techniques-r-skills-ggplot2-joins">Coding Techniques (R Skills: <code>ggplot2</code> &amp; Joins)</h2>
+<section id="the-grammar-of-graphics-ggplot2" class="level3">
+<h3 class="anchored" data-anchor-id="the-grammar-of-graphics-ggplot2">The Grammar of Graphics (<code>ggplot2</code>)</h3>
+<p>Plotting is done by adding layers with <code>+</code>. The philosophy is: <strong>Data</strong> <span class="math inline">\(\rightarrow\)</span> <strong>Aesthetics</strong> <span class="math inline">\(\rightarrow\)</span> <strong>Geometries</strong>.</p>
+<ul>
+<li><strong>Basic Structure</strong>: <code>ggplot(data = DATA) + aes(x = X, y = Y) + geom_something()</code></li>
+<li><strong>Aesthetics (<code>aes()</code>)</strong>: Maps <strong>data variables</strong> to visual properties (e.g., <code>x</code>, <code>y</code>, <code>color</code>, <code>fill</code>, <code>size</code>).</li>
+<li><strong>Geometries (<code>geom_...()</code>)</strong>: Defines how data is displayed (e.g., <code>geom_point()</code> for scatter, <code>geom_bar()</code> for bar charts).</li>
+</ul>
+</section>
+<section id="exploratory-data-analysis-eda" class="level3">
+<h3 class="anchored" data-anchor-id="exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</h3>
+<p>EDA is detective work aimed at understanding data <strong>before</strong> building models. 1. <strong>Visualize Distributions</strong>: Use histograms and boxplots to check for skewness, outliers, or multiple peaks. 2. <strong>Assess Reliability</strong>: <strong>CRITICAL STEP</strong>. Calculate the Coefficient of Variation (CV) to assess data trustworthiness.</p>
+<p>```r #| label: reliability-cv # Coefficient of Variation (CV) = MOE / Estimate / 1.645 # CV &lt; 12% is reliable (green) # CV &gt; 40% is unreliable (red)</p>
+<p>Data Joins (dplyr) Used to combine separate datasets (e.g., joining income data with education data on a common ID).</p>
+<p>Most Common: left_join()</p>
+<p>Keeps all rows from the left (first) dataset and adds matching columns from the right dataset.</p>
+<p>Crucial Step: Always verify joins by checking the number of rows before and after the join to ensure no data loss or duplication.</p>
+<p>Questions &amp; Challenges (Self-Reflection) Ethical Visualization Practice I must incorporate the 5 Essential Guidelines for Using ACS Data into all my labs:</p>
+<p>Report the MOEs.</p>
+<p>Include a footnote if MOEs are omitted.</p>
+<p>Provide context using CV categories (e.g., “This estimate is unreliable because CV &gt; 40%”).</p>
+<p>Reduce uncertainty (aggregate data/geographies).</p>
+<p>Conduct significance tests for comparisons.</p>
+<p>ggplot2 Nuances Need more practice separating Aesthetics (inside aes(), uses column names) from Constants (outside aes(), like color = “blue”) when building plots.</p>
+<p>Policy Connection My job is to visually assess data quality (e.g., plotting MOE % vs.&nbsp;Population size to find vulnerable, undercounted communities) and communicate uncertainty clearly, which is an ethical requirement under the AICP Code of Ethics.</p>
 
 
 </section>
